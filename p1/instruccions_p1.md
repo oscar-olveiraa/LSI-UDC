@@ -228,15 +228,17 @@ IP->10.11.48.135
    
    	3-O systemd-timesyncd ten como función principal proporcionar a sincronización de tempo no sistema con servidores NTP remotos
 
-### **6.-En el apartado d) se ha familiarizado con los services que corren en su sistema. ¿Son necesarios todos ellos?. Si identifica servicios no necesarios, proceda adecuadamente. Una limpieza no le vendrá mal a su 	 equipo, tanto desde el punto de vista de la seguridad, como del rendimiento.**
+### **6.-Identifique y cambie los principales parámetros de su segundo interface de red (ens34). Configure un segundo interface lógico. Al terminar, déjelo como estaba.**
 
 ### **7.-¿Qué rutas (routing) están definidas en su sistema?. Incluya una nueva ruta estática a una determinada red.**
 
  	1-Para ver sas rutas definidas do sistema -> ip route show  // route -n
 
    	2-Para añadir unha nova ruta -> ip route add 10.11.52.0/24 via 10.11.48.1 (ip route add a.a.a.a/b via gateway)
+
+### **8.-En el apartado d) se ha familiarizado con los services que corren en su sistema. ¿Son necesarios todos ellos?. Si identifica servicios no necesarios, proceda adecuadamente. Una limpieza no le vendrá mal a su 	 equipo, tanto desde el punto de vista de la seguridad, como del rendimiento.**
     
-### **8.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
+### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
 	
    
   
