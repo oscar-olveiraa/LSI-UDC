@@ -154,30 +154,66 @@ IP->10.11.48.135
   
 		Codename:	buster
 
+	**Empezamos a actualizar a máquina:**
 
   	2-Facemos un update e un upgrade do equipo (como root) -> `apt update && apt upgrade` (si poñemos a extension a ambos -y todas as preguntas que faga durante a execución do comando será automaticamente si)
   
   	3-Entramos dentro do archivo *source.list* e modificamos da seguinte maneira (si hai comentarios(lineas iniciadas con #) podemos deixalos):
   
-  		deb http://deb.debian.org/debian/ bullseye main
-  
-		deb-src http://deb.debian.org/debian/ bullseye main
-  
+		deb http://deb.debian.org/debian/ bullseye main non-free contrib
+		deb-src http://deb.debian.org/debian/ bullseye main non-free contrib
 
-		deb https://deb.debian.org/debian-security bullseye-security main contrib
+		deb http://security.debian.org/debian-security bullseye-security/updates main contrib non-free
+		deb-src http://security.debian.org/debian-security bullseye-security/updates main contrib non-free
 
-		deb-src https://deb.debian.org/debian-security bullseye-security main contrib
-  
-
-		deb http://deb.debian.org/debian/ bullseye-updates main contrib
-  
-		deb-src http://deb.debian.org/debian/ bullseye-updates main contrib
+		deb http://deb.debian.org/debian/ bullseye-updates main contrib non-free
+		deb-src http://deb.debian.org/debian/ bullseye-updates main contrib non-free
 
   	4-Executamos `apt update`
   
   	5-Executamos `apt full-upgrade`
   
   	6-Rebotamos a máquina `reboot`
+
+   	A estas alturas si arrancamos a maquina e volvemos a executar o comando do paso 1 deberiamnos ver:
+
+  		No LSB modules are available.
+  
+		Distributor ID:	Debian
+  
+		Description:	Debian GNU/Linux 11 (bullseye)
+  
+		Release:	11
+  
+		Codename:	bullseye
+
+  	Este ano temos unha nova version de debian, a 12 e para actulizala ao maximo facemos o seguinte :
+  
+  	1-Facemos un update e un upgrade
+
+   	2-Volvemos ao *source.list* e modificamos de esta maneira:
+
+  		deb http://deb.debian.org/debian/ bookworm main non-free contrib
+		deb-src http://deb.debian.org/debian/ bookworm main non-free contrib
+
+		deb http://security.debian.org/debian-security bookworm-security/updates main contrib non-free
+		deb-src http://security.debian.org/debian-security bookworm-security/updates main contrib non-free
+
+		deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free
+		deb-src http://deb.debian.org/debian/ bookworm-updates main contrib non-free
+
+  	3-Facemos un update e un full-upgrade
+
+   	4-Volvemos a reiniciar a máquina
+
+  	5-Volvemos a comprobar a distro e version actual e sería:
+
+    		No LSB modules are available.
+		Distributor ID: Debian
+		Description:    Debian GNU/Linux 12 (bookworm)
+		Release:        12
+		Codename:       bookworm 
+
 
 
 ### **3.-Identifique la secuencia completa de arranque de una máquina basada en la distribución de referencia (desde la pulsación del botón de arranque hasta la pantalla de login).**
@@ -186,7 +222,7 @@ IP->10.11.48.135
    
    	O target e un enlace simbólico (ficheiro ou directorio que se encontra en un sitio diferente á estructura de directorios) ao target verdadeiro
     
-			1-Executamos -> systemctl get-default -> graphical.target
+			1-Executamos -> systemctl get-default
 
 *  Cómo podría cambiar el target de arranque?. 
    
@@ -212,7 +248,7 @@ IP->10.11.48.135
 
 	1-Para mirar os tempos de botado -> systemctl-analyze
 
-  	2-Para mirar os tempos de ejecucions dos servicios -> systemctl-analyze blame`
+  	2-Para mirar os tempos de ejecucions dos servicios -> systemctl-analyze blame
 
 ### **5.-Investigue si alguno de los servicios del sistema falla. Pruebe algunas de las opciones del sistema de registro journald. Obtenga toda la información journald referente al proceso de botado de la máquina. ¿Qué 	hace el systemd-timesyncd?.**
 
@@ -239,6 +275,16 @@ IP->10.11.48.135
 ### **8.-En el apartado d) se ha familiarizado con los services que corren en su sistema. ¿Son necesarios todos ellos?. Si identifica servicios no necesarios, proceda adecuadamente. Una limpieza no le vendrá mal a su 	 equipo, tanto desde el punto de vista de la seguridad, como del rendimiento.**
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
+
+### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
+
+### **11.-Nuestro sistema es el encargado de gestionar la CPU, memoria, red, etc., como soporte a los datos y procesos. Monitorice en “tiempo real” la información relevante de los procesos del sistema y los recursos 	  consumidos. Monitorice en “tiempo real” las conexiones de su sistema.**
+
+### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que 	  trabaja contra ella en remoto por ssh.**
+
+### **13.-Existen múltiples paquetes para la gestión de logs (syslog, syslog-ng, rsyslog). Utilizando el rsyslog pruebe su sistema de log local. Pruebe también el journald.**
+
+### **14.-Configure IPv6 6to4 y pruebe ping6 y ssh sobre dicho protocolo. ¿Qué hace su tcp-wrapper en las conexiones ssh en IPv6? Modifique su tcp-wapper siguiendo el criterio del apartado h). ¿Necesita IPv6?. ¿Cómo se 	  deshabilita IPv6 en su equipo?**
 	
    
   
