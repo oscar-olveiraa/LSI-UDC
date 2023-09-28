@@ -266,6 +266,20 @@ IP->10.11.48.135
 
 ### **6.-Identifique y cambie los principales parámetros de su segundo interface de red (ens34). Configure un segundo interface lógico. Al terminar, déjelo como estaba.**
 
+*  Cambiar parametros ens34:
+
+        1-Xa está feito no ejercicio 1, no apartado de interfaces
+
+*  Configurar unha interfaz lóxica: Unha interfaz lóxica sirve para conectarse a unha interfaz física (ens34) de forma indirecta par asi aislar o trafico e mellorar a seguridade. Para facelo facemos os seguintes pasos :
+
+        1-Executamos o comando -> ifconfig ens34:1 192.168.1.1 netmask 255.255.255.0 (usar unha ip que estea fora do rango para evitar conflictos)
+
+    	2-Levantamos a interfaz -> ifconfig ens34:1 up
+
+        3-Comprobamos que teñamos ahora 4 interfaces (ens33, ens34, ens34:1, lo(loopback)) -> ifconfig
+
+        4-Si queremos gardar a interfaz, añadimola ao archivo interfaces. Si queremos eliminala facemos un reboot da máquina
+
 ### **7.-¿Qué rutas (routing) están definidas en su sistema?. Incluya una nueva ruta estática a una determinada red.**
 
  	1-Para ver sas rutas definidas do sistema -> ip route show  // route -n
@@ -276,6 +290,26 @@ IP->10.11.48.135
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
 
+   Para crear un script temos que crear un servicio para que se execute ese script de forma autónoma.
+
+   - Creación do script:
+
+        1-Diriximonos ao path /usr/local/bin
+
+     	2-Creamos un archivo con extensión .sh e programamos o script -> nano script.sh
+
+     		#! /bin/bash
+     		#O meu script -> Crea un archivo txt e garda en é´unha frase
+
+     		mensaje="ejecucion do script -> todo correcto"
+     		archivo="/usr/local/bin/script.txt"
+
+     		echo "$mensaje">"$archivo"
+     		echo "mensaje gardado en $archivo"
+
+        3- Creamos os servicio:
+     			
+	
 ### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
 
 ### **11.-Nuestro sistema es el encargado de gestionar la CPU, memoria, red, etc., como soporte a los datos y procesos. Monitorice en “tiempo real” la información relevante de los procesos del sistema y los recursos 	  consumidos. Monitorice en “tiempo real” las conexiones de su sistema.**
