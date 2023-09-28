@@ -37,6 +37,8 @@ IP->10.11.48.135
   			broadcast 10.11.51.255
       
   			network 10.11.50.0
+
+	(Auto->o puerto levantarase despois de un reset do equipo // iface: Sirve para indicar o interfaz // inet ou inet6: Identifica cómo vai obtener o direccionamiento do puerto)
       
 	4-Gardamos (ctrl+o) e salimos (ctrl+x)
 
@@ -70,7 +72,7 @@ IP->10.11.48.135
 
 	1-Vamos ao directorio `/etc`
 
-	2-Entramos dentro do archivo resolv.conf. Este archivo funciona para a resolución de nomes dentro de unha red determinada ou Internet, reguistrando aqui os servidores DNS de confianza -> `nano resolv.conf`
+	2-Entramos dentro do archivo resolv.conf. Este archivo funciona para a resolución de nomes dentro de unha red determinada ou Internet, reguistrando aqui os servidores DNS de confianza. Hai varios servidores DNS para obter redundancia -> `nano resolv.conf`
 
   		domain udc.pri
   
@@ -250,7 +252,7 @@ IP->10.11.48.135
 
   	2-Para mirar os tempos de ejecucions dos servicios -> systemctl-analyze blame
 
-### **5.-Investigue si alguno de los servicios del sistema falla. Pruebe algunas de las opciones del sistema de registro journald. Obtenga toda la información journald referente al proceso de botado de la máquina. ¿Qué 	hace el systemd-timesyncd?.**
+### **5.-Investigue si alguno de los servicios del sistema falla. Pruebe algunas de las opciones del sistema de registro journald. Obtenga toda la información journald referente al proceso de botado de la máquina. ¿Qué hace el systemd-timesyncd?.**
 
  	1-Para ver os servicios que fallan -> systemctl list-units --type=service --failed
 
@@ -270,7 +272,9 @@ IP->10.11.48.135
 
         1-Xa está feito no ejercicio 1, no apartado de interfaces
 
-*  Configurar unha interfaz lóxica: Unha interfaz lóxica sirve para conectarse a unha interfaz física (ens34) de forma indirecta par asi aislar o trafico e mellorar a seguridade. Para facelo facemos os seguintes pasos :
+*  Configurar unha interfaz lóxica: Estas interfaces virtuales utilizanse para asignar múltiples direcciones IP ou configuracions de red adicionales a mesma interfaz física(ens34)para asi aislar o trafico e mellorar a seguridade. 
+
+   Para facelo facemos os seguintes pasos:
 
         1-Executamos o comando -> ifconfig ens34:1 192.168.1.1 netmask 255.255.255.0 (usar unha ip que estea fora do rango para evitar conflictos)
 
@@ -307,14 +311,16 @@ IP->10.11.48.135
      		echo "$mensaje">"$archivo"
      		echo "mensaje gardado en $archivo"
 
-        3- Creamos os servicio:
+        3- Creamos os servicio dirixindonos a ruta /etc/sustemd/system
+
+     		
      			
 	
 ### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
 
 ### **11.-Nuestro sistema es el encargado de gestionar la CPU, memoria, red, etc., como soporte a los datos y procesos. Monitorice en “tiempo real” la información relevante de los procesos del sistema y los recursos 	  consumidos. Monitorice en “tiempo real” las conexiones de su sistema.**
 
-### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que 	  trabaja contra ella en remoto por ssh.**
+### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que trabaja contra ella en remoto por ssh.**
 
 ### **13.-Existen múltiples paquetes para la gestión de logs (syslog, syslog-ng, rsyslog). Utilizando el rsyslog pruebe su sistema de log local. Pruebe también el journald.**
 
