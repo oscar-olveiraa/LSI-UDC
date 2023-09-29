@@ -177,9 +177,9 @@ IP->10.11.48.135
   
   	6-Rebotamos a máquina `reboot`
 
-   	A estas alturas si arrancamos a maquina e volvemos a executar o comando do paso 1 deberiamnos ver:
+   	A estas alturas si arrancamos a maquina e volvemos a executar o comando do paso 1 deberiamos ver:
 
-  		No LSB modules are available.
+	    No LSB modules are available.
   
 		Distributor ID:	Debian
   
@@ -210,10 +210,14 @@ IP->10.11.48.135
 
   	5-Volvemos a comprobar a distro e version actual e sería:
 
-    		No LSB modules are available.
+        No LSB modules are available.
+  
 		Distributor ID: Debian
+  
 		Description:    Debian GNU/Linux 12 (bookworm)
+  
 		Release:        12
+  
 		Codename:       bookworm 
 
 
@@ -291,6 +295,48 @@ IP->10.11.48.135
    	2-Para añadir unha nova ruta -> ip route add 10.11.52.0/24 via 10.11.48.1 (ip route add a.a.a.a/b via gateway)
 
 ### **8.-En el apartado d) se ha familiarizado con los services que corren en su sistema. ¿Son necesarios todos ellos?. Si identifica servicios no necesarios, proceda adecuadamente. Una limpieza no le vendrá mal a su 	 equipo, tanto desde el punto de vista de la seguridad, como del rendimiento.**
+
+   Para quitar servicios executamos os comandos `systemctl disable nome_Servicio` e despois `systemctl mask nome_Servicio`. A diferencencia entre deixamos en disable a facerlle un mask é que si o deixamos o disable e o servicio 
+   ten dependencias, ao reinicar o ordenador esas dependencias poden chamar ao servicio e volvelo a activar mentras que con un mask queda permanentemente deshabilitado. Para quitarlle o mask facemos `systemctl unmask 
+   nome_Servicio` e para quitar un disable `systemctl enable nome_Servicio`. Cousas a ter en conta: 
+
+   - Para mirar dependencias -> `systemctl list-dependencies SERVICIO/TARGET/SOCKET`
+
+   - Para mirar a cadena do camiño crítico(unidades que consumen mais tempo) -> `systemd-analyze critical-chain`
+
+   - Para sacar unha gráfica secuencial as unidades que interveñen no arranque -> `systemd-analyze plot` . Esto generá un texto xml que si o copias e pegas en un bloc de notas con extension .html abreche a grafica no navegador
+
+   - Si cando cambias o target non baixa o tempo de userspace e eliminando algun servicio tampouco baixa, facendo un `systemd-analyze plot` ves o que che tarda en realidad. Si é menos do que che indica en terminal, cando volves a 
+     maquina fas un reboot e miras outra vez. Asi os tempos deberia aparecer xa ben, polo menos no meu caso. 
+   
+   
+   Lista de servicio que quitei:
+
+   * *alsa-units.service* -> subsistema de sonido estándar que proporciona a infraestructura para xestionar dispositivos de sonido, controladores e aplicacions relacionadas co sonido
+
+   * *avahi-daemon.service* -> proporciona funcionalidad para o descubrimiento e a comunicación de servicios en unha red local sin facer unha configuracion manual como un mDNS
+
+   * *bluetooth.service* -> non vamos usar esto na practica asi que a tomar por culo
+
+   * *cups.service // cups-browsed-service* -> gestionar o servidor de impresión e proporcionar a funcionalidad esencial para a administración de impresoras, a configuración e o procesamiento de traballos de impresión. A segunda 
+      é un servicio adicional que se usa para a deteccion automatica da impresora en red local. Curiosidad, si antes de quitar este servicio facemos un lsof -i -P veremos os puertos que escoita a nosa máquina. Cups usa o puerto 
+      631 pero ao deshabilitalo desaparece
+
+   * *keyboard-setup.service* -> esta unidad utilizase para configurar o diseño del teclado durante o proceso de inicio del sistema, innecesario
+
+   * *e2scrub_reap* -> verifica todos os metadatos en un sistema de archivos montado si o sistema de archivos reside en un volumen lóxico LVM (tecnoloxía que permite a flexibilidade dos dispositivos de almacenamiento, como discos 
+      duros y particiones
+
+   * *plymouth-quit-wait.service* -> este servicio controla o tempo que se mostra a pantalla de inicio ou de cierre antes de que o sistema continúe ca carga dos compoñentes do sistema operativo ou se apague. Como non 
+      temos entorno grafico, aire
+
+   * *plymouth.service* -> gestiona a presentación da pantalla de inicio durante o proceso de arranque e apagado do sistema
+
+   * *plymouth-quit.service* -> deter o servizo de Plymouth despois de que o sistema se iniciase completamente e se cargara o entorno de traballo principal.
+
+   * *plymouth-halt.service* -> está relacionado co manexo da pantalla de cierre, é dicir, a pantalla que se mostra cando se apaga ou reinicia o SO. De plymouth hasta aquí porque os outros teñen depencias fuertes e si os quitas 
+      sube o tempo do userspace
+
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
 
@@ -303,7 +349,7 @@ IP->10.11.48.135
      	2-Creamos un archivo con extensión .sh e programamos o script -> nano script.sh
 
      		#! /bin/bash
-     		#O meu script -> Crea un archivo txt e garda en é´unha frase
+     		#O meu script -> Crea un archivo txt e garda en el unha frase
 
      		mensaje="ejecucion do script -> todo correcto"
      		archivo="/usr/local/bin/script.txt"
@@ -311,10 +357,22 @@ IP->10.11.48.135
      		echo "$mensaje">"$archivo"
      		echo "mensaje gardado en $archivo"
 
-        3- Creamos os servicio dirixindonos a ruta /etc/sustemd/system
+        3-Creamos os servicio dirixindonos a ruta /etc/sustemd/system
 
-     		
-     			
+     		[Unit]
+     		Description=O meu servicio para o script	
+	
+            [Service]
+     		Type=oneshot
+     		ExecStart=/usr/local/bin/script.sh
+     		RemainAfterExit=yes
+
+	        [Install]
+     		WantedBy=multi-user.target
+
+        4-Activamos o servicio -> systemctl enable meu.service
+
+     
 	
 ### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
 
