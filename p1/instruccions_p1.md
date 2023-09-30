@@ -372,6 +372,8 @@ IP->10.11.48.135
 
         4-Activamos o servicio -> systemctl enable meu.service
 
+     	5-Comprobamos no directorio /usr/local/bin/ si se creou o .txt
+
      
 	
 ### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
