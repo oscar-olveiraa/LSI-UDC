@@ -1,4 +1,4 @@
-# **Práctica 1 Legislación y Seguridad Informática**
+# **Práctica 1 Legislación e Seguridad Informática**
 
 IP->10.11.48.135
 
@@ -390,7 +390,7 @@ IP->10.11.48.135
             [Service]
      		Type=oneshot
      		ExecStart=/usr/local/bin/script.sh
-     		RemainAfterExit=yes
+     		RemainAfterExit=no
 
 	        [Install]
      		WantedBy=multi-user.target
