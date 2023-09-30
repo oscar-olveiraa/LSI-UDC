@@ -260,7 +260,7 @@ IP->10.11.48.135
 
  	1-Para ver os servicios que fallan -> systemctl list-units --type=service --failed
 
-  	2-Journald é un sistema de rexistros de sucesos. Algunhas das opcions son -b, -u:
+  	2-Journald é un sistema de rexistros de sucesos, encargado de xestionar estos registros de eventos e rexistros do sistemas en un formato estructurado e eficiente. Algunhas das opcions son -b, -u:
 
    		-journalctl -u SERVICIO -> mostra o log de un servicio (seguimento de un archivo para todos os acontecementos que afectan a un proceso particular).
      
@@ -351,6 +351,16 @@ IP->10.11.48.135
 
    * *tracker-extract* -> forma parte do GNOME, extrae e analiza metadatos contido textual de archivos para indexalos y buscalos mais facilmente e así máis accesibles para o usuario ->  `apt remove --purge tracker-extract`
 
+   Outras ferramentas/comandos para eliminar archivos basura:
+
+   * `apt autoclean`: Elimina da caché paquetes de versions antiguas.
+   
+   * `apt clean`: Elimina todos os paquetes da caché.
+
+   * `apt autoremove`: Elimina aqueles paquetes perdidos, paquetes instalados como dependencias de outras instalacións, que xa non están.
+
+   * `apt autoremove --purge`: a opción --purge sirve para outras chamadas de apt para borrar archivos de configuración.
+    
    Con este tuneado a túa maquina debería andar entre 8-10s, polo menos no meu caso.
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
@@ -372,7 +382,7 @@ IP->10.11.48.135
      		echo "$mensaje">"$archivo"
      		echo "mensaje gardado en $archivo"
 
-        3-Creamos os servicio dirixindonos a ruta */etc/sustemd/system*
+        3-Creamos os servicio dirixindonos a ruta */etc/systemd/system*
 
      		[Unit]
      		Description=O meu servicio para o script	
