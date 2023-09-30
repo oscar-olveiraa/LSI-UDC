@@ -312,6 +312,8 @@ IP->10.11.48.135
    
    Lista de servicio que quitei:
 
+   * *accounts-daemon* -> servicio para GNOME , innecesario xa que non usamos o graphical.target:
+
    * *alsa-units.service* -> subsistema de sonido estándar que proporciona a infraestructura para xestionar dispositivos de sonido, controladores e aplicacions relacionadas co sonido
 
    * *avahi-daemon.service* -> proporciona funcionalidad para o descubrimiento e a comunicación de servicios en unha red local sin facer unha configuracion manual como un mDNS
@@ -337,6 +339,19 @@ IP->10.11.48.135
    * *plymouth-halt.service* -> está relacionado co manexo da pantalla de cierre, é dicir, a pantalla que se mostra cando se apaga ou reinicia o SO. De plymouth hasta aquí porque os outros teñen depencias fuertes e si os quitas 
       sube o tempo do userspace
 
+   Para baixar mais o tempo miramos a secuencia de arranque -> `journalctl -b` . No meu caso tiña servicios relacionados co GNOME(interfaz gráfica). Para quitalos facemos `apt remove --purge SERVICIO`:
+   
+   * *pipewire.service* -> simplifica a xestión de audio e video no sistema, así como proporcionar unha infraestructura para aplicacións multimedia -> `apt remove --purge pipewire`
+
+   * *pulseaudio.service* -> obtorga funcionalidad de audio. Actúa como unha capa intermedia entre as aplicacións de audio e o hardware de sonido do sistema -> `apt remove --purge pulseaudio`
+
+   * *GNOME* -> algún servicio ou socket que teña GNOME ou chame a GNOME -> `apt remove --purge 'gnome*'` (o * indica que todo que teña gnome eliminase)
+
+   * *gvfs* -> sistema de archivos virtual de GNOME -> `apt  remove --purge gvfs`
+
+   * *tracker-extract* -> forma parte do GNOME, extrae e analiza metadatos contido textual de archivos para indexalos y buscalos mais facilmente e así máis accesibles para o usuario ->  `apt remove --purge tracker-extract`
+
+   Con este tuneado a túa maquina debería andar entre 8-10s, polo menos no meu caso.
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
 
@@ -344,9 +359,9 @@ IP->10.11.48.135
 
    - Creación do script:
 
-        1-Diriximonos ao path /usr/local/bin
+        1-Diriximonos ao path */usr/local/bin*
 
-     	2-Creamos un archivo con extensión .sh e programamos o script -> nano script.sh
+     	2-Creamos un archivo con extensión .sh e programamos o script -> `nano script.sh`
 
      		#! /bin/bash
      		#O meu script -> Crea un archivo txt e garda en el unha frase
@@ -357,7 +372,7 @@ IP->10.11.48.135
      		echo "$mensaje">"$archivo"
      		echo "mensaje gardado en $archivo"
 
-        3-Creamos os servicio dirixindonos a ruta /etc/sustemd/system
+        3-Creamos os servicio dirixindonos a ruta */etc/sustemd/system*
 
      		[Unit]
      		Description=O meu servicio para o script	
@@ -370,19 +385,42 @@ IP->10.11.48.135
 	        [Install]
      		WantedBy=multi-user.target
 
-        4-Activamos o servicio -> systemctl enable meu.service
+        4-Activamos o servicio -> `systemctl enable meu.service`
 
-     	5-Comprobamos no directorio /usr/local/bin/ si se creou o .txt
+     	5-Comprobamos no directorio */usr/local/bin/* si se creou o .txt
 
      
 	
 ### **10.-Identifique las conexiones de red abiertas a y desde su equipo.**
 
+   Executamos os comando -> `netstat -netua`
+   
+   Hai unha ferramenta mais moderna, ss, onde a diferencia é rendimento, eficiencia e ten info máis detallada -> `ss -netua`
+   
+   Outros parámetros(sirve tanto para netstat como para ss):
+   
+   *  -tlun -> mostra solo as conexions activas
+     
+   * -a -> mostra conexions en puertos
+      
+   * -l -> conexións e sockets que solo escoitan 
+
 ### **11.-Nuestro sistema es el encargado de gestionar la CPU, memoria, red, etc., como soporte a los datos y procesos. Monitorice en “tiempo real” la información relevante de los procesos del sistema y los recursos 	  consumidos. Monitorice en “tiempo real” las conexiones de su sistema.**
+
+  Para facer os seguimento en tempo real dos recursos e procesos executamos -> `top`
+
+  Para ver en tempo real as conexions do sistema -> `netstat -netuac`
 
 ### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que trabaja contra ella en remoto por ssh.**
 
 ### **13.-Existen múltiples paquetes para la gestión de logs (syslog, syslog-ng, rsyslog). Utilizando el rsyslog pruebe su sistema de log local. Pruebe también el journald.**
+
+   Rsyslog é unha ferramenta utilizada para a xestión e envío de logs(grabación secuencial nun archivo de todos os acontecementos que afectan a un proceso particular).
+
+   Para enviar un mensaje de log -> `logger "mensaje"`
+
+   Para comprobar -> `tail -n /var/log/syslog` (tail é un comando para mostrar as últimas líneas de un archivo de texto ou a saída de un fluxo de datos en tiempo real, o parametro -n é para sacar os últimos n mensajes e indicamos 
+   o directorio donde se garda os logs). Si queremos sacar todo o log por pantalla facemos un cat /var/log/syslog
 
 ### **14.-Configure IPv6 6to4 y pruebe ping6 y ssh sobre dicho protocolo. ¿Qué hace su tcp-wrapper en las conexiones ssh en IPv6? Modifique su tcp-wapper siguiendo el criterio del apartado h). ¿Necesita IPv6?. ¿Cómo se 	  deshabilita IPv6 en su equipo?**
 	
