@@ -433,6 +433,31 @@ IP->10.11.48.135
    o directorio donde se garda os logs). Si queremos sacar todo o log por pantalla facemos un cat /var/log/syslog
 
 ### **14.-Configure IPv6 6to4 y pruebe ping6 y ssh sobre dicho protocolo. ¿Qué hace su tcp-wrapper en las conexiones ssh en IPv6? Modifique su tcp-wapper siguiendo el criterio del apartado h). ¿Necesita IPv6?. ¿Cómo se 	  deshabilita IPv6 en su equipo?**
+
+### **15.-En colaboración con otro alumno de prácticas, configure un servidor y un cliente NTPSec básico.**
+
+
+### **16.-Cruzando los dos equipos anteriores, configure con rsyslog un servidor y un cliente de logs.**
+
+
+### **17.-Haga todo tipo de propuestas sobre los siguientes aspectos.: ¿Qué problemas de seguridad identifica en los dos apartados anteriores?. ¿Cómo podría solucionar los problemas identificados?**
+
+
+### **18.-En la plataforma de virtualización corren, entre otros equipos, más de 200 máquinas virtuales para LSI. Como los recursos son limitados, y el disco duro también, identifique todas aquellas acciones que pueda hacer para reducir el espacio de disco ocupado.**
+
+
+### **19.-Instale el SIEM splunk en su máquina. Sobre dicha plataforma haga los siguientes puntos.:**
+   **a. Genere una query que visualice los logs internos del splunk**
+
+   **b. Cargué el fichero /var/log/apache2/access.log y el journald del sistema y visualícelos.**
+   
+   **c. Obtenga las IPs de los equipos que se han conectado a su servidor web (pruebe a generar algún tipo de gráfico de visualización), así como las IPs que se han conectado un determinado día de un determinado mes.**
+   
+   **d. Trate de obtener el país y región origen de las IPs que se han conectado a su servidor web y si posible sus coordenadas geográficas.** 
+   
+   **e. Obtenga los hosts origen, sources y sourcestypes.**
+   
+   **f. ¿cómo podría hacer que splunk haga de servidor de log de su cliente?**
 	
    
   
