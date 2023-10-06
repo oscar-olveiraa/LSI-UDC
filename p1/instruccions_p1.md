@@ -353,6 +353,12 @@ IP->10.11.48.135
 
    Outras ferramentas/comandos para eliminar archivos basura:
 
+   * Podemos eliminar o office -> `apt remove --purge 'libreoffice*'`
+
+   * Eliminamos tamén o firefox -> `apt remove --purge firefox-esr`
+
+   * Eliminei o mand-db -> `apt remove --purge man-db`
+
    * `apt autoclean`: Elimina da caché paquetes de versions antiguas.
    
    * `apt clean`: Elimina todos os paquetes da caché.
@@ -447,7 +453,40 @@ IP->10.11.48.135
 
 
 ### **19.-Instale el SIEM splunk en su máquina. Sobre dicha plataforma haga los siguientes puntos.:**
+
+   1- Descargamonos o splunk que nos deixa o Diosnino e si temos MobaXterm ou BitviseSSH con tal de arrastar o .deb a carpeta que queiramos da máquina xa estaría
+
+   2-Executamos na ruta onde o arrastramos o paquete o comando -> `dpkg -i nombresplunk.deb`
+
+   3-Diriximonos a ruta */opt/splunk/bin/* e executamos o comando -> `./splunk start` . Con este comando saltaranos un texto sobre a licencia, presionamos 'q' e aceptamos a licencia. A continuacion pediranos un username 
+     e unha contraseña (poñer calquera cousa fácil). Ao resxistrarse comenzará a iniciar o noso servidor web
+
+   4-Ao iniciar o servidor web vamos a un navegador e poñemos 'http://ipens33:8000'
+
+   5-Apareceranos unha ventana para autenticarse e a continuación o menú principal
+
+   Cousiñas:
+
+   * Para parar e refrescar o noso servidor vamos a misma ruta na que o iniciamos e poñemos `./splunk stop` // `./splunk restart`
+
+   * Si andamos xustos de espacio en disco, ao facer un query(unha consulta) no splunk vainos poñer que non temos suficiente espacio(fai falta ter 5000MB). Para esto seguimos os pasos:
+
+        1-Diriximonos a ruta */opt/splunk/etc/system/default* e entramos en *server.conf*.
+     
+     	2-Dentro vamos as seguintes lineas e copialas:
+
+     		#disk usage processor settings
+     		[diskUsage]
+     		minFreeSpace = 5000
+     		pollingFrequency = 100000
+     		pollingTimerFrequency = 10
+     
+     	3-Unha vez copiadas vamos a ruta */opt/splunk/etc/system/local* e pegamos ao final do archivo *server.conf* as anteriores lineas cambiando o parametro de minFreeSpace = 5000 a 50
+
+
    **a. Genere una query que visualice los logs internos del splunk**
+         
+   	1-Dentro do menu principal de splunk vamos a 'search & reporting' e poñemos na linea de consulta -> index=_internal
 
    **b. Cargué el fichero /var/log/apache2/access.log y el journald del sistema y visualícelos.**
    
