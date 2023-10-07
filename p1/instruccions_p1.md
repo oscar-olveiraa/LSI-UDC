@@ -481,22 +481,66 @@ IP->10.11.48.135
      		pollingFrequency = 100000
      		pollingTimerFrequency = 10
      
-     	3-Unha vez copiadas vamos a ruta */opt/splunk/etc/system/local* e pegamos ao final do archivo *server.conf* as anteriores lineas cambiando o parametro de minFreeSpace = 5000 a 50
+     	3-Unha vez copiado esto, vamos a ruta */opt/splunk/etc/system/local* e pegamos ao final do archivo *server.conf* as anteriores lineas cambiando o parametro de minFreeSpace = 5000 a 50
+
+   * Si queremos eliminar splunk -> `rm -rf /opt`
+
+   * Para o apartado b) si queremos usar apache2 (non é obligatorio para a p1), instalamos con `apt install apache2` e unha vez iniciada si poñemos no navegador a nosa ip_ens33 xa estaría. Refrescamos a páxina un par de
+     veces e teriamos xa en */var/log/apache2* o acces.log
 
 
-   **a. Genere una query que visualice los logs internos del splunk**
+   **A) Genere una query que visualice los logs internos del splunk**
          
    	1-Dentro do menu principal de splunk vamos a 'search & reporting' e poñemos na linea de consulta -> index=_internal
 
-   **b. Cargué el fichero /var/log/apache2/access.log y el journald del sistema y visualícelos.**
+   **B) Cargué el fichero /var/log/apache2/access.log y el journald del sistema y visualícelos.**
+
+ 	1-No menú principal vamos a Add Data -> Monitor -> Files & Directories -> Browse(si non instalamos o apache2 eliximos calquer .log). Debaixo eliximos 
+	Continuously Monitor(gardase o .log en data input) ou index once(non se garda) ->  next hasta o final
+     
+    2-Para o journal(creo), facemos un journalctl -b, copiamos o que sala por pantalla e pegamos en un archivo .log que creamos e facemos o que pon no paso anterior
+
+   **C) Obtenga las IPs de los equipos que se han conectado a su servidor web (pruebe a generar algún tipo de gráfico de visualización), así como las IPs que se han conectado un determinado día de un determinado mes.**
+
+   	1-Si temos o apache2, en access.log cambiamos as ips que aparecen na izquierda por outras de outros paises para 'simular' que alguén entrou no noso servidor de apache. 
+    Si non temos apache2 creamos un .log como por ejemplo:
+    			
+	   9/12/22 10:23:39.000 AM | Ip: 102.213.244.0
+  	   9/13/22 10:23:39.000 AM | Ip: 154.30.28.0
+       9/14/22 10:23:39.000 AM | Ip: 104.252.206.0
+       9/15/22 10:23:39.000 AM | Ip: 102.177.100.0
+
+ 	   **Nota -> cambiamos os dia da fecha porque si non tomao como si fora un solo evento
    
-   **c. Obtenga las IPs de los equipos que se han conectado a su servidor web (pruebe a generar algún tipo de gráfico de visualización), así como las IPs que se han conectado un determinado día de un determinado mes.**
+   	2-Vamos ao noso servidor splunk e facemos o paso 1 do apartado b
+    
+    3-Unha vez cargado o archivo .log, no buscador cambiamos o filtro a 'all time' en vez de 'last 24h'
+    
+    4-Na parte izquierda a altura dos eventos vamos a '+ Extract new file' -> pinchamos unha linea onde haba unha ip -> 
+        ->next -> regular expresion -> next- > subrayamos a ip, poñemos un nombre -> next hasta o final
+	
+	5-Volveremos a páxina para facer o query e poñemos -> source="/var/log/prueba1.log" | search date_wday="friday" date_month="september" date_mday="14" . 
+ 	Para simular o filtro ben, buscaremos o calendario de 2022, e miramos que día é por exemplo a ip do 9/14/22 e deberia aparecer solo un evento con este query		
    
-   **d. Trate de obtener el país y región origen de las IPs que se han conectado a su servidor web y si posible sus coordenadas geográficas.** 
+   **D) Trate de obtener el país y región origen de las IPs que se han conectado a su servidor web y si posible sus coordenadas geográficas.** 
+
+   	1-No mesmo archivo e ca mesma configuración do apartado c, facemos os seguintes queries:
+
+        Nestes, o primeir query marcara en rojo no mapa os paises que teñen esa ip e no segundo query pondrá na lista que está debaixo do mapa a region 
+	   do país (hai que ter o mapa en choropleth map): 
+    
+	   source="/var/log/prueba1.log" | iplocation iplsi | stats count by Country | geom geo_countries allFeatures=True featureIdField=Country
+  	   source="/var/log/prueba1.log" | iplocation iplsi | stats count by Country, Region | geom geo_countries allFeatures=True featureIdField=Country, Region
+
+       Neste, marcara con un círculo a zona donde está a ip, xunto cas coordenadas (hai que cambiar o mapa a cluster map): 
+       
+       source="/var/log/prueba1.log" | top iplsi | iplocation iplsi | geostats latfield=lat longfield=lon count
    
-   **e. Obtenga los hosts origen, sources y sourcestypes.**
+   **E) Obtenga los hosts origen, sources y sourcestypes.**
+
+   	1-Nos eventos, debaixo aparecen estos campos, no noso caso como fixemolo dende a nosa máquina son todos iguales
    
-   **f. ¿cómo podría hacer que splunk haga de servidor de log de su cliente?**
+   **F) ¿cómo podría hacer que splunk haga de servidor de log de su cliente?**
 	
    
   
