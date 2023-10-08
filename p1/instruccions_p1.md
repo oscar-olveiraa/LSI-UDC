@@ -429,6 +429,25 @@ IP->10.11.48.135
 
 ### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que trabaja contra ella en remoto por ssh.**
 
+   * Configuracion hosts.allow en */etc*. Añadir ao final do archivo as lineas:
+
+         #loopback
+         sshd: 127.0.0.1, 10.11.48.113, 10.11.50.118: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/1si/logssh
+
+         #vpn
+         sshd: 10.30 : spawn echo `/bin/date`\: intentando conectar %a con %A [PERMITIDO] >> /home/lsi/logssh
+
+         #ipv6(o do compañeiro)
+         sshd: [2002:a0b:3076::1]/48
+
+   * Configuracion hosts.deny en */etc*. Añadir ao final do archivo as lineas:
+
+     	 ALL: ALL: spawn echo `bin/date`\: intento conectar %a con %A [DENEGADA] >> /home/1si/logssh
+
+   * TCP Wrapper enfócase en controlar o acceso a servizos de red en un sistema específico, un firewall é unha solución de seguridad máis amplia. Pode protexer una rede completa, un sistema contra ameazas ou controlar
+
+     o tráfico de rede.
+
 ### **13.-Existen múltiples paquetes para la gestión de logs (syslog, syslog-ng, rsyslog). Utilizando el rsyslog pruebe su sistema de log local. Pruebe también el journald.**
 
    Rsyslog é unha ferramenta utilizada para a xestión e envío de logs(grabación secuencial nun archivo de todos os acontecementos que afectan a un proceso particular).
