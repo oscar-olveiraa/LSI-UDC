@@ -38,7 +38,7 @@ IP->10.11.48.135
       
   			network 10.11.50.0
 
-	(Auto->o puerto levantarase despois de un reset do equipo // iface: Sirve para indicar o interfaz // inet ou inet6: Identifica cómo vai obtener o direccionamiento do puerto)
+	> (Auto->o puerto levantarase despois de un reset do equipo // iface: Sirve para indicar o interfaz // inet ou inet6: Identifica cómo vai obtener o direccionamiento do puerto)
       
 	4-Gardamos (ctrl+o) e salimos (ctrl+x)
 
@@ -331,7 +331,7 @@ IP->10.11.48.135
    * *keyboard-setup.service* -> esta unidad utilizase para configurar o diseño del teclado durante o proceso de inicio del sistema, innecesario
 
    * *e2scrub_reap* -> verifica todos os metadatos en un sistema de archivos montado si o sistema de archivos reside en un volumen lóxico LVM (tecnoloxía que permite a flexibilidade dos dispositivos de almacenamiento, como discos 
-      duros y particiones
+      duros y particiones)
 
    * *plymouth-quit-wait.service* -> este servicio controla o tempo que se mostra a pantalla de inicio ou de cierre antes de que o sistema continúe ca carga dos compoñentes do sistema operativo ou se apague. Como non 
       temos entorno grafico, aire
@@ -553,6 +553,8 @@ IP->10.11.48.135
 ### **16.-Cruzando los dos equipos anteriores, configure con rsyslog un servidor y un cliente de logs.**
 
    > Neste caso, cliente seria 10.11.48.135 e servidor 10.11.48.118. Podemos usar UDP ou TCP pero como é máis fiable e seguro de que chegen todos os mensajes con TCP, facemolo con TCP
+
+   > Vamos ao directorio /etc/rsyslog.conf 
 
   * Configuración/comprobación:
 
