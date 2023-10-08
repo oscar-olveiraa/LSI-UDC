@@ -256,6 +256,7 @@ IP->10.11.48.135
 
   	2-Para mirar os tempos de ejecucions dos servicios -> systemctl-analyze blame
 
+
 ### **5.-Investigue si alguno de los servicios del sistema falla. Pruebe algunas de las opciones del sistema de registro journald. Obtenga toda la información journald referente al proceso de botado de la máquina. ¿Qué hace el systemd-timesyncd?.**
 
  	1-Para ver os servicios que fallan -> systemctl list-units --type=service --failed
@@ -269,6 +270,7 @@ IP->10.11.48.135
 	 	-journalctl -k -> rexistros relacionados solamente co kernel
    
    	3-O systemd-timesyncd ten como función principal proporcionar a sincronización de tempo no sistema con servidores NTP remotos
+
 
 ### **6.-Identifique y cambie los principales parámetros de su segundo interface de red (ens34). Configure un segundo interface lógico. Al terminar, déjelo como estaba.**
 
@@ -288,11 +290,13 @@ IP->10.11.48.135
 
         4-Si queremos gardar a interfaz, añadimola ao archivo interfaces. Si queremos eliminala facemos un reboot da máquina
 
+
 ### **7.-¿Qué rutas (routing) están definidas en su sistema?. Incluya una nueva ruta estática a una determinada red.**
 
  	1-Para ver sas rutas definidas do sistema -> ip route show  // route -n
 
    	2-Para añadir unha nova ruta -> ip route add 10.11.52.0/24 via 10.11.48.1 (ip route add a.a.a.a/b via gateway)
+
 
 ### **8.-En el apartado d) se ha familiarizado con los services que corren en su sistema. ¿Son necesarios todos ellos?. Si identifica servicios no necesarios, proceda adecuadamente. Una limpieza no le vendrá mal a su 	 equipo, tanto desde el punto de vista de la seguridad, como del rendimiento.**
 
@@ -368,6 +372,7 @@ IP->10.11.48.135
    * `apt autoremove --purge`: a opción --purge sirve para outras chamadas de apt para borrar archivos de configuración.
     
    Con este tuneado a túa maquina debería andar entre 8-10s, polo menos no meu caso.
+
     
 ### **9.-Diseñe y configure un pequeño “script” y defina la correspondiente unidad de tipo service para que se ejecute en el proceso de botado de su máquina**
 
@@ -421,11 +426,15 @@ IP->10.11.48.135
       
    * -l -> conexións e sockets que solo escoitan 
 
+
+
 ### **11.-Nuestro sistema es el encargado de gestionar la CPU, memoria, red, etc., como soporte a los datos y procesos. Monitorice en “tiempo real” la información relevante de los procesos del sistema y los recursos 	  consumidos. Monitorice en “tiempo real” las conexiones de su sistema.**
 
   Para facer os seguimento en tempo real dos recursos e procesos executamos -> `top`
 
   Para ver en tempo real as conexions do sistema -> `netstat -netuac`
+
+
 
 ### **12.-Un primer nivel de filtrado de servicios los constituyen los tcp-wrappers. Configure el tcp-wrapper de su sistema (basado en los ficheros hosts.allow y hosts.deny) para permitir conexiones SSH a un determinado 	  conjunto de IPs y denegar al resto. ¿Qué política general de filtrado ha aplicado?. ¿Es lo mismo el tcp-wrapper que un firewall?. Procure en este proceso no perder conectividad con su máquina. No se olvide que trabaja contra ella en remoto por ssh.**
 
@@ -445,8 +454,10 @@ IP->10.11.48.135
      	 ALL: ALL: spawn echo `bin/date`\: intento conectar %a con %A [DENEGADA] >> /home/1si/logssh
 
    * TCP Wrapper enfócase en controlar o acceso a servizos de red en un sistema específico, un firewall é unha solución de seguridad máis amplia. Pode protexer una rede completa, un sistema contra ameazas ou controlar
-
      o tráfico de rede.
+
+
+
 
 ### **13.-Existen múltiples paquetes para la gestión de logs (syslog, syslog-ng, rsyslog). Utilizando el rsyslog pruebe su sistema de log local. Pruebe también el journald.**
 
@@ -457,66 +468,173 @@ IP->10.11.48.135
    Para comprobar -> `tail -n /var/log/syslog` (tail é un comando para mostrar as últimas líneas de un archivo de texto ou a saída de un fluxo de datos en tiempo real, o parametro -n é para sacar os últimos n mensajes e indicamos 
    o directorio donde se garda os logs). Si queremos sacar todo o log por pantalla facemos un cat /var/log/syslog
 
+
+
 ### **14.-Configure IPv6 6to4 y pruebe ping6 y ssh sobre dicho protocolo. ¿Qué hace su tcp-wrapper en las conexiones ssh en IPv6? Modifique su tcp-wapper siguiendo el criterio del apartado h). ¿Necesita IPv6?. ¿Cómo se 	  deshabilita IPv6 en su equipo?**
 
+   1-Añadimos a */etc/network/interfaces* as seguintes lineas:
+
+   	auto 6to4
+	   iface 6to4 inet6 v4tunnel
+	   address 2002:a0b:3087::1
+	   netmask 16
+	   gateway ::10.11.48.1
+	   endpoint any
+	   local 10.11.48.135
+
+   2-Levantamos a interfaz -> `ifup 6to4`
+
+   3-Probamos que funcionara con un `ping6`
+
+   4-Añadimolo a *hosts.allow* (solo se pode añadir a do compañeiro porque vpn non contempla ipv6)
+
+   -----------
+
+   A IPV6 non faría falta. Podemolo deshabilitar comentando en interfaces a linea 'auto 6to4' para que non se levante auntomaticamente ao reinicar e indo ao archivo na ruta *etc/sysctl.conf* e escribindo as seguintes 
+   lineas ao final:
+   		
+       net.ipv6.conf.all.disable_ipv6 = 1
+       net.ipv6.conf.default.disable_ipv6 = 1
+       net.ipv6.conf.lo.disable_ipv6 = 1
+
+
+
+
 ### **15.-En colaboración con otro alumno de prácticas, configure un servidor y un cliente NTPSec básico.**
+
+   > O servidor seria 10.11.48.118 e o cliente 10.11.48.135
+
+ 1-Configuración:
+
+   * Configuracion como servidor de */etc/ntpsec/ntp.conf*. Cousas modificadas: 'tos maxclock 7', 'tos minclock 4 minsane 1', todos os pool comentados
+
+         # /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
+	     driftfile /var/lib/ntp/ntp.drift
+	     leapfile /usr/share/zoneinfo/leap-seconds.list
+	     ...
+ 	     #This should be maxclock 7, but que pool entreis count toward maxclock
+  	     tos maxclock 7
+    	 ...
+         tos minclock 4 minsane 1
+         ...
+	     # Servidor
+	     server 127.127.1.1 minpoll 4
+	     fudge 127.127.1.1 stratum 0	
+         restrict default ignore 
+  	     restrict 10.11.48.135 mask 255.255.255.255 noquery nopeer
+   	     restrict 127.0.0.1
+    	 restrict ::1
+         ...     
+   	
+   * Configuracion como cliente en */etc/ntpsec/ntp.conf*. Cousas modificadas: 'tos maxclock 7', 'tos minclock 4 minsane 1', todos os pool comentados. Como temos que ter na misma máquina o cliente e o servidor cara a 
+     defensa, configuramos o cliente seguido do servidor e si un traballa como cliente, comenta a configuración do servidor e viceversa:
+
+	     #cliente 
+ 	     server 10.11.48.118
+  	     restrict default ignore 
+   	     restrict 127.0.0.1 mask 255.255.255.255 noserve nomodify
+    	 restrict ::1
+
+   > Facemos ambos un reboot da máquina
+
+ 2-Comprobación(toda a explicación é intuición nosa):
+
+   1-Executamos ntpq -p ambos, e comprobamos no servidor que o campo reach chegue a 377(máximo nº de solucitudes respondidas polo que quere decir que canto máis baixo sea o reach, menos peticíons lle chegou entón non 
+     está sincronizado de todo). Cando chegue cambiamos temporalmente a fecha -> `date -s "fecha hora"`
+
+   2-O cliente unha vez que o servidor chega ao reach a 377 fai outro reboot da máquina. Ao reiniciar fai `ntpdate ipserver`. Con este comando, sincronzase co servidor e tendría que aparecer un mensaje da fecha/hora 
+     cambiada (volveriamos a comprobar con un `date`) e ao servidor ao volver a executar o `ntpq -p` tendría que aparecerlle un "*" ao lado de LOCAL no campo 'remote'. Unha vez sincronizado e para saber que funciona 
+     ben, o cliente ten que ver que cada vez que executa o comando `ntpq -p` que o seu reach vai aumentando.
+
+  > A sincronización ao ser UDP pode levar tempo dependendo do tráfico da rede e ao mellor tarde en aparecer o "*"
+
 
 
 ### **16.-Cruzando los dos equipos anteriores, configure con rsyslog un servidor y un cliente de logs.**
 
    > Neste caso, cliente seria 10.11.48.135 e servidor 10.11.48.118. Podemos usar UDP ou TCP pero como é máis fiable e seguro de que chegen todos os mensajes con TCP, facemolo con TCP
 
-   * Configuracion do servidor:
+  * Configuración/comprobación:
 
-    	 #################
-	#### MODULES ####
-	#################
+      1-Configuracion do servidor:
+	
+ 	     #################
+	     #### MODULES ####
+	     #################
 
-	module(load="imuxsock") # provides support for local system logging
-	module(load="imklog")   # provides kernel logging support
-	#module(load="immark")  # provides --MARK-- message capability
+	     module(load="imuxsock") # provides support for local system logging
+	     module(load="imklog")   # provides kernel logging support
+	     #module(load="immark")  # provides --MARK-- message capability
 
-	# provides UDP syslog reception
-	#module(load="imudp")
-	#input(type="imudp" port="514")
+	     # provides UDP syslog reception
+	     #module(load="imudp")
+	     #input(type="imudp" port="514")
 
-	# provides TCP syslog reception
-	module(load="imtcp")
-	input(type="imtcp" port="514")
-        $AllowedSender TCP 127.0.0.1, 10.11.48.135
+	     # provides TCP syslog reception
+	     module(load="imtcp")
+	     input(type="imtcp" port="514")
+             $AllowedSender TCP 127.0.0.1, 10.11.48.135
 
-	###########################
-	#### GLOBAL DIRECTIVES ####
-	###########################
- 	$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+	     ###########################
+	     #### GLOBAL DIRECTIVES ####
+	     ###########################
+ 	     $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 
-	.
- 	.
-  	.
+	     .
+ 	     .
+  	     .
 
- 	###############
-        #### RULES ####
-	###############
-	$template remote, "/var/log/rsyslog-server/%fromhost-ip%/%programname%.log"
-	*.* ?remote
-	& stop
+ 	     ###############
+             #### RULES ####
+	     ###############
+	     $template remote, "/var/log/%fromhost-ip%/%programname%.log"
+	     *.* ?remote
+	     & stop
 
-   * Configuración do cliente:
+      2-Configuración do cliente:
 
-       *.* action(
-          type="omfwd" 
-       target="10.11.48.50" 
-       port="514" 
-       protocol="tcp" 
-       action.resumeRetryCount="-1"
-       queue.type="linkedlist"
-       queue.filename="/var/log/rsyslog-queue"
-       queue.saveOnShutdown="on"
-) 
+         *.* action(
+         type="omfwd" 
+         target="10.11.48.50" 
+         port="514" 
+         protocol="tcp" 
+         action.resumeRetryCount="-1"
+         queue.type="linkedlist"
+         queue.filename="/var/log/rsyslog-queue"
+         queue.saveOnShutdown="on") 
+
+     3-Actualizamos o rsyslog -> `systemctl restart rsyslog.service`
+  
+     4-O cliente manda un par de mensaxe con este comando -> `logger "hola1"`
+  
+     5-O servidor comproba que lle chegaron indo a ruta establecida lo template -> */var/log/ipens33_cliente/lsi.log*(si mandou os mensaxes como usuario) || */var/log/ipens33_cliente/root.log*(si mandou os mensaxes como 
+       root)
+
+* Probamos a cola:
+
+     1-O servidor desactiva en este orde os servicios -> `systemctl stop syslog` `systemctl stops syslog.socket` `systemctl stop rsyslog`
+  
+     2-O cliente manda un par de mensaxes e o servidor comproba que non lle chegen
+
+     3-O servidor levanta outra vez os anteriores servicios polo mesmo orden e comproba que lle chegen os mensaxes a hora en que reactivou os servicios
+
+* Temas de seguridade: Como solo queremos que nos cheguen ou mandar mensaxes do noso compañeiro añadimos ao estas lineas ao *hosts.allows*
+
+ 	  #rsyslog
+  	  rsyslogd: 10.11.48.118, 10.11.50.118, 127.0.0.1
+   	  rsyslogd: 10.30.
+      rsyslogd: [2002:a0b:3076::1]/48
+
 
 
 ### **17.-Haga todo tipo de propuestas sobre los siguientes aspectos.: ¿Qué problemas de seguridad identifica en los dos apartados anteriores?. ¿Cómo podría solucionar los problemas identificados?**
 
+   * En NTP como usa UDP pois unha gran numero de vulnerabilidades. P.e -> falta de autenticación, ataques de inudacion, ataques de DDoS, spoofin de ip
+
+   * En rsyslog usamos TCP xa que é mais fiable pero tamén hai vulnerabilidades xa que abres un novo porto na máquina innecesariamente (porto 80), aínda que contrarrestasmos algúns problemas filtrando o rsyslog nos 
+     TCP-Wrappers
+
+     
 
 ### **18.-En la plataforma de virtualización corren, entre otros equipos, más de 200 máquinas virtuales para LSI. Como los recursos son limitados, y el disco duro también, identifique todas aquellas acciones que pueda hacer para reducir el espacio de disco ocupado.**
 
@@ -530,7 +648,7 @@ IP->10.11.48.135
 
 	3-Eliminar todos os kernels menos os dous últimos(un é o kernel actual e o outro é a copia) -> apt-get --purge remove linux-image-4...
 
-   * Para seguir facendo unha limpeza a fondo, executamos comandos que hai ao final do ejercicio 8 (lina 362-368)
+   * Para seguir facendo unha limpeza a fondo, executamos comandos que hai ao final do ejercicio 8(autoclean, autoremove...).
 
 
 ### **19.-Instale el SIEM splunk en su máquina. Sobre dicha plataforma haga los siguientes puntos.:**
