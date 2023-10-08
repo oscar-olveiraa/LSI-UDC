@@ -431,13 +431,13 @@ IP->10.11.48.135
 
    * Configuracion hosts.allow en */etc*. Añadir ao final do archivo as lineas:
 
-         #loopback
-         sshd: 127.0.0.1, 10.11.48.113, 10.11.50.118: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/1si/logssh
+         #loopback e compañeiro
+         sshd: 127.0.0.1, 10.11.48.118, 10.11.50.118: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/1si/logssh
 
          #vpn
-         sshd: 10.30 : spawn echo `/bin/date`\: intentando conectar %a con %A [PERMITIDO] >> /home/lsi/logssh
+         sshd: 10.30. : spawn echo `/bin/date`\: intentando conectar %a con %A [PERMITIDO] >> /home/lsi/logssh
 
-         #ipv6(o do compañeiro)
+         #ipv6 do compañeiro
          sshd: [2002:a0b:3076::1]/48
 
    * Configuracion hosts.deny en */etc*. Añadir ao final do archivo as lineas:
@@ -464,11 +464,73 @@ IP->10.11.48.135
 
 ### **16.-Cruzando los dos equipos anteriores, configure con rsyslog un servidor y un cliente de logs.**
 
+   > Neste caso, cliente seria 10.11.48.135 e servidor 10.11.48.118. Podemos usar UDP ou TCP pero como é máis fiable e seguro de que chegen todos os mensajes con TCP, facemolo con TCP
+
+   * Configuracion do servidor:
+
+    	 #################
+	#### MODULES ####
+	#################
+
+	module(load="imuxsock") # provides support for local system logging
+	module(load="imklog")   # provides kernel logging support
+	#module(load="immark")  # provides --MARK-- message capability
+
+	# provides UDP syslog reception
+	#module(load="imudp")
+	#input(type="imudp" port="514")
+
+	# provides TCP syslog reception
+	module(load="imtcp")
+	input(type="imtcp" port="514")
+        $AllowedSender TCP 127.0.0.1, 10.11.48.135
+
+	###########################
+	#### GLOBAL DIRECTIVES ####
+	###########################
+ 	$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+	.
+ 	.
+  	.
+
+ 	###############
+        #### RULES ####
+	###############
+	$template remote, "/var/log/rsyslog-server/%fromhost-ip%/%programname%.log"
+	*.* ?remote
+	& stop
+
+   * Configuración do cliente:
+
+       *.* action(
+          type="omfwd" 
+       target="10.11.48.50" 
+       port="514" 
+       protocol="tcp" 
+       action.resumeRetryCount="-1"
+       queue.type="linkedlist"
+       queue.filename="/var/log/rsyslog-queue"
+       queue.saveOnShutdown="on"
+) 
+
 
 ### **17.-Haga todo tipo de propuestas sobre los siguientes aspectos.: ¿Qué problemas de seguridad identifica en los dos apartados anteriores?. ¿Cómo podría solucionar los problemas identificados?**
 
 
 ### **18.-En la plataforma de virtualización corren, entre otros equipos, más de 200 máquinas virtuales para LSI. Como los recursos son limitados, y el disco duro también, identifique todas aquellas acciones que pueda hacer para reducir el espacio de disco ocupado.**
+
+   * Para ver información sobre o almacenamento da máquina -> `df -H`
+
+   * Borrar imáxenes kernel antiguas:
+
+	1-Ver kernel actual -> uname -r
+
+	2-Vemos todos os kernels do sistema -> dpkg --list | grep linux-image
+
+	3-Eliminar todos os kernels menos os dous últimos(un é o kernel actual e o outro é a copia) -> apt-get --purge remove linux-image-4...
+
+   * Para seguir facendo unha limpeza a fondo, executamos comandos que hai ao final do ejercicio 8 (lina 362-368)
 
 
 ### **19.-Instale el SIEM splunk en su máquina. Sobre dicha plataforma haga los siguientes puntos.:**
