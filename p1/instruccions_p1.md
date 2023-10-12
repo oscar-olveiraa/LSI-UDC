@@ -484,9 +484,9 @@ IP->10.11.48.135
 
    2-Levantamos a interfaz -> `ifup 6to4`
 
-   3-Probamos que funcionara con un `ping6`
+   3-Probamos que funcionara con un `ping6` e hacemos `ssh -6 lsi@ipv6_compi` 
 
-   4-Añadimolo a *hosts.allow* (solo se pode añadir a do compañeiro porque vpn non contempla ipv6)
+   4-Añadimolo a *hosts.allow* (solo se pode añadir a do compañeiro porque vpn non contempla ipv6 para conectarte á tua propia máquina por ipv6)
 
    -----------
 
@@ -535,18 +535,18 @@ IP->10.11.48.135
    	     restrict 127.0.0.1 mask 255.255.255.255 noserve nomodify
     	 restrict ::1
 
-   > Facemos ambos un reboot da máquina
+   > Facendo un systemctl restart ntpsec serviría pero para asegurarnos facemos os dous un reboot da máquina
 
  2-Comprobación(toda a explicación é intuición nosa):
 
-   1-Executamos ntpq -p ambos, e comprobamos no servidor que o campo reach chegue a 377(máximo nº de solucitudes respondidas polo que quere decir que canto máis baixo sea o reach, menos peticíons lle chegou entón non 
+   * Executamos ntpq -p ambos, e comprobamos no servidor que o campo reach chegue a 377(máximo nº de solucitudes respondidas polo que quere decir que canto máis baixo sea o reach, menos peticíons lle chegou entón non 
      está sincronizado de todo). Cando chegue cambiamos temporalmente a fecha -> `date -s "fecha hora"`
 
-   2-O cliente unha vez que o servidor chega ao reach a 377 fai outro reboot da máquina. Ao reiniciar fai `ntpdate ipserver`. Con este comando, sincronzase co servidor e tendría que aparecer un mensaje da fecha/hora 
+   * O cliente unha vez que o servidor chega ao reach a 377 fai outro reboot da máquina. Ao reiniciar fai `ntpdate ipserver`. Con este comando, sincronzase co servidor e tendría que aparecer un mensaje da fecha/hora 
      cambiada (volveriamos a comprobar con un `date`) e ao servidor ao volver a executar o `ntpq -p` tendría que aparecerlle un "*" ao lado de LOCAL no campo 'remote'. Unha vez sincronizado e para saber que funciona 
      ben, o cliente ten que ver que cada vez que executa o comando `ntpq -p` que o seu reach vai aumentando.
 
-  > A sincronización ao ser UDP pode levar tempo dependendo do tráfico da rede e ao mellor tarde en aparecer o "*"
+  > A sincronización ao usar UDP ntpsec pode levar tempo dependendo do tráfico da rede e ao mellor tarde en aparecer o "*"
 
 
 
@@ -591,7 +591,7 @@ IP->10.11.48.135
 	     ###############
 	     $template remote, "/var/log/%fromhost-ip%/%programname%.log"
 	     *.* ?remote
-	     & stop
+	     & stop #esta línea é para que cando un sea server, o syslog lea solo hasta esta línea, si non chegaría hasta o final do documento
 
       2-Configuración do cliente:
 
@@ -620,21 +620,13 @@ IP->10.11.48.135
 
      3-O servidor levanta outra vez os anteriores servicios polo mesmo orden e comproba que lle chegen os mensaxes a hora en que reactivou os servicios
 
-* Temas de seguridade: Como solo queremos que nos cheguen ou mandar mensaxes do noso compañeiro añadimos ao estas lineas ao *hosts.allows*
-
- 	  #rsyslog
-  	  rsyslogd: 10.11.48.118, 10.11.50.118, 127.0.0.1
-   	  rsyslogd: 10.30.
-      rsyslogd: [2002:a0b:3076::1]/48
-
 
 
 ### **17.-Haga todo tipo de propuestas sobre los siguientes aspectos.: ¿Qué problemas de seguridad identifica en los dos apartados anteriores?. ¿Cómo podría solucionar los problemas identificados?**
 
    * En NTP como usa UDP pois unha gran numero de vulnerabilidades. P.e -> falta de autenticación, ataques de inudacion, ataques de DDoS, spoofin de ip
 
-   * En rsyslog usamos TCP xa que é mais fiable pero tamén hai vulnerabilidades xa que abres un novo porto na máquina innecesariamente (porto 80), aínda que contrarrestasmos algúns problemas filtrando o rsyslog nos 
-     TCP-Wrappers
+   * En rsyslog usamos TCP xa que é mais fiable pero tamén hai vulnerabilidades xa que abres un novo porto na máquina innecesariamente (porto 80), aínda que contrarrestasmos bastantes problemas con respeto ao UDP
 
      
 
@@ -657,7 +649,7 @@ IP->10.11.48.135
 
    1- Descargamonos o splunk que nos deixa o Diosnino e si temos MobaXterm ou BitviseSSH con tal de arrastar o .deb a carpeta que queiramos da máquina xa estaría
 
-   2-Executamos na ruta onde o arrastramos o paquete o comando -> `dpkg -i nombresplunk.deb`
+   2-Executamos o comando para desempaquetar e executar en debian, na ruta onde o arrastramos o .deb-> `dpkg -i nombresplunk.deb`
 
    3-Diriximonos a ruta */opt/splunk/bin/* e executamos o comando -> `./splunk start` . Con este comando saltaranos un texto sobre a licencia, presionamos 'q' e aceptamos a licencia. A continuacion pediranos un username 
      e unha contraseña (poñer calquera cousa fácil). Ao resxistrarse comenzará a iniciar o noso servidor web
@@ -666,7 +658,7 @@ IP->10.11.48.135
 
    5-Apareceranos unha ventana para autenticarse e a continuación o menú principal
 
-   Cousiñas:
+   ### Cousiñas:
 
    * Para parar e refrescar o noso servidor vamos a misma ruta na que o iniciamos e poñemos `./splunk stop` // `./splunk restart`
 
@@ -687,7 +679,9 @@ IP->10.11.48.135
    * Si queremos eliminar splunk -> `rm -rf /opt`
 
    * Para o apartado b) si queremos usar apache2 (non é obligatorio para a p1), instalamos con `apt install apache2` e unha vez iniciada si poñemos no navegador a nosa ip_ens33 xa estaría. Refrescamos a páxina un par de
-     veces e teriamos xa en */var/log/apache2* o acces.log
+     veces e teriamos xa en */var/log/apache2* o acces.log.
+     > *IMPORTANTE, SI SE INSTALA APACHE2 HAI QUE SECURIZALO, POLO QUE É POUCO RECOMENDABLE FACELO DE ESTA MANEIRA*
+
 
 
    **A) Genere una query que visualice los logs internos del splunk**
@@ -727,7 +721,7 @@ IP->10.11.48.135
 
    	1-No mesmo archivo e ca mesma configuración do apartado c, facemos os seguintes queries:
 
-        Nestes, o primeir query marcara en rojo no mapa os paises que teñen esa ip e no segundo query pondrá na lista que está debaixo do mapa a region 
+        Nestes, o primer query marcara en rojo no mapa os paises que teñen esa ip e no segundo query pondrá na lista que está debaixo do mapa a region 
 	   do país (hai que ter o mapa en choropleth map): 
     
 	   source="/var/log/prueba1.log" | iplocation iplsi | stats count by Country | geom geo_countries allFeatures=True featureIdField=Country
@@ -740,8 +734,6 @@ IP->10.11.48.135
    **E) Obtenga los hosts origen, sources y sourcestypes.**
 
    	1-Nos eventos, debaixo aparecen estos campos, no noso caso como fixemolo dende a nosa máquina son todos iguales
-   
-   **F) ¿cómo podría hacer que splunk haga de servidor de log de su cliente?**
 	
    
   
