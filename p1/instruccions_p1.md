@@ -324,7 +324,7 @@ IP->10.11.48.135
 
    * *bluetooth.service* -> non vamos usar esto na practica asi que a tomar por culo
 
-   * *cups.service // cups-browsed-service* -> gestionar o servidor de impresión e proporcionar a funcionalidad esencial para a administración de impresoras, a configuración e o procesamiento de traballos de impresión. A segunda 
+   * *cups.service // cups-browsed.service* -> gestionar o servidor de impresión e proporcionar a funcionalidad esencial para a administración de impresoras, a configuración e o procesamiento de traballos de impresión. A segunda 
       é un servicio adicional que se usa para a deteccion automatica da impresora en red local. Curiosidad, si antes de quitar este servicio facemos un lsof -i -P veremos os puertos que escoita a nosa máquina. Cups usa o puerto 
       631 pero ao deshabilitalo desaparece
 
