@@ -173,7 +173,7 @@ IP->10.11.48.135
 
   	4-Executamos `apt update`
   
-  	5-Executamos `apt full-upgrade`
+  	5-Executamos `apt full-upgrade` . Durante a actualizacion da nosa máquina vainos saltar duas pantallas. A primeira acaba con un ':' e presionariamos 'q' para salir xa que é como unha guía e na segunda pantalla 	  damoslle a espacio para que se marque un * na casilla e despois enter. 
   
   	6-Rebotamos a máquina `reboot`
 
@@ -204,7 +204,7 @@ IP->10.11.48.135
 		deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free
 		deb-src http://deb.debian.org/debian/ bookworm-updates main contrib non-free
 
-  	3-Facemos un update e un full-upgrade
+  	3-Facemos un update e un full-upgrade. Durante a actualización vainos saltar unha pantalla con varias opcións. Según fuentes presionariamos enter na segunda pero tamen se pode pulsar a primeira. As outras creo 	  que no (investigar :🤔)
 
    	4-Volvemos a reiniciar a máquina
 
@@ -503,6 +503,8 @@ IP->10.11.48.135
 ### **15.-En colaboración con otro alumno de prácticas, configure un servidor y un cliente NTPSec básico.**
 
    > O servidor seria 10.11.48.118 e o cliente 10.11.48.135
+
+   > Antes de empezar, hai que instalar ntpsec -> `apt-get install ntpsec`
 
  1-Configuración:
 
