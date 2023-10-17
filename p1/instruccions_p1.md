@@ -316,7 +316,9 @@ IP->10.11.48.135
    
    Lista de servicio que quitei:
 
-   * *accounts-daemon* -> servicio para GNOME , innecesario xa que non usamos o graphical.target:
+   * *accounts-daemon* -> servicio para GNOME , innecesario xa que non usamos o graphical.target.
+
+   * *NetworkManager.service* -> servicio para red, solo usamos ssh polo que non fai falta.
 
    * *alsa-units.service* -> subsistema de sonido estándar que proporciona a infraestructura para xestionar dispositivos de sonido, controladores e aplicacions relacionadas co sonido
 
