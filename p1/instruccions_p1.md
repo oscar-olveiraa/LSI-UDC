@@ -348,6 +348,8 @@ IP->10.11.48.135
    Para baixar mais o tempo miramos a secuencia de arranque -> `journalctl -b` . No meu caso tiña servicios relacionados co GNOME(interfaz gráfica). Para quitalos facemos `apt remove --purge SERVICIO`:
    
    * *pipewire.service* -> simplifica a xestión de audio e video no sistema, así como proporcionar unha infraestructura para aplicacións multimedia -> `apt remove --purge pipewire`
+   
+   * *plymouth*  -> eliminamos este servicio porque ten que ver co arranque para o escritorio e a pantalla da sesion de inico -> `apt remove --purge plymouth`  
 
    * *pulseaudio.service* -> obtorga funcionalidad de audio. Actúa como unha capa intermedia entre as aplicacións de audio e o hardware de sonido do sistema -> `apt remove --purge pulseaudio`
 
