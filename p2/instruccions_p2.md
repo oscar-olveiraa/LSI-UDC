@@ -65,11 +65,10 @@
 
    1)O atacante fai sniffing ao trafico do compañeiro:
 
-       1ºforma ->  ettercap -T -q -i ens33 -M arp:remote //ipcompa/ //10.11.48.1/ (sniffing da paqueteria)
-                   Mentras esfina, en outro terminal:
-                   tcpdump -i ens33 -s 65535 -w compa.pcap (para gardar o trafico capturado)
-
-       2ºforma (creo)->  ettercap -T -q -i ens33 -w ettercap.pcap -M arp:remote /ipvictima// /ipsalida// (esnifa e captura a paqueteria á vez)
+       ettercap -T -q -i ens33 -M arp:remote //ipcompa/ //10.11.48.1/ (sniffing da paqueteria)
+       Mentras esfina, en outro terminal:
+       tcpdump -i ens33 -s 65535 -w lsicompa.pcap (para gardar o trafico capturado). [-i] é para espicificar a interfaz, [-s] o limite
+       de bytes dos paquetes a capturar e [-w] o achivo donde se gardará
 
    2)Mentres o atacante fai o sniffing e garda a paqueteria(tcpdump), a victima busca imagenes,paginas,archivos en http (https non sirve xa que a info está cifrada):
 
@@ -78,9 +77,9 @@
 
    3)O atacante sale de ettercap con q (si salimos con ctrl+c tiramos ca conexion do compañeiro), fai ctrl+c no terminal onde está o tcpdump e enviamos o archivo á nosa maquina local:
 
-      1ºforma -> si temos windows e nos conectamos por ssh con mobaXTerm ou Bitvise SSH con arrastrar o archivo ao noso ordenador xa está.
+      1º forma -> si temos windows e nos conectamos por ssh con mobaXTerm ou Bitvise SSH con arrastrar o archivo ao noso ordenador xa está.
 
-      2ºforma -> si non temos acceso ao noso arbol de directorios da maquina de lsi ou temos Linux executamos -> scp lsi@ipens33 rutaArchivo
+      2º forma -> si non temos acceso ao noso arbol de directorios da maquina de lsi ou temos Linux executamos -> scp lsi@ipens33 rutaArchivo
 
   4)Abrimos Wireshark:
 
@@ -124,13 +123,13 @@
 
 ### 3.-Obtenga la relación de las direcciones MAC de los equipos de su segmento.
 
-      1º forma(hai que instalar nmap):
+      1º forma (hai que instalar nmap):
       
       Executamos -> nmap -sP 10.11.48.0/23
       nmap é unha ferramenta que escanea a rede. [-sp] fai un 'ping scan' da ip ou rango de ip que pasemos, neste caso desde o 10.11.48.0 a 10.11.49.255
 
 
-      2º forma(hai que instalar nast):
+      2º forma (hai que instalar nast):
       
       Executamos -> nast -m -i ens33 
       nast é unha ferramenta que se utiliza para analizar e visualizar o tráfico de rede en tempo real. [-m] mostra en tempo real a lista de hosts dunha LAN.
@@ -139,15 +138,22 @@
 
 ### 4.-Obtenga la relación de las direcciones IPv6 de su segmento.
 
-    1º)Executamos o comando -> ping6 -c 2 -I ens33 ff02::1, onde [-c 2] quere decir o nº de ping que faremos, [-I] a interfaz e por ultimo a direccion ipv6 multicast(todos os nodos na LAN)
+    1º) Executamos o comando -> ping6 -c 2 -I ens33 ff02::1, onde [-c 2] quere decir o nº de ping que faremos, [-I] a interfaz e por ultimo a direccion ipv6 multicast(todos os nodos na LAN)
     
-    2º) facemos ->  ip -6  neigh . Esto sirve para analizar a cache de ipv6. Si executamos o anterior comando e uns segundos depois, este, indicanos as direccions ipv6 que responderon do noso
+    2º) Facemos ->  ip -6  neigh . Esto sirve para analizar a cache de ipv6. Si executamos o anterior comando e uns segundos depois, este, indicanos as direccions ipv6 que responderon do noso
     segmento
 
 ### 5.-Obtenga el tráfico de entrada y salida legítimo de su interface de red ens33 e investigue los servicios, conexiones y protocolos involucrados.
 
+    1º) Para ver o noso propio tráfico executamos o comando -> tcpdump -i ens33 -s 65535 -w meu.pcap
+
+    2º) Mandamos o archivo.pcap ao noso ordenador local e executamolo en Wireshark
 
 ### 6.-Mediante arpspoofing entre una máquina objetivo (víctima) y el router del laboratorio obtenga todas las URL HTTP visitadas por la víctima.
+
+    1º) Volvemos a coller o archivo lsicompa.pcap do exeercicio 2 (reutilizamos este xa que no ejercicio 2 fixemos tamen un arp poisoning)
+
+    2º) En Wireshark vamos a 'Estadisticas' > 'HTTP' > 'peticiones' e veremos as urls que vimos
 
 
 ### 7.-Instale metasploit. Haga un ejecutable que incluya un Reverse TCP meterpreter payload para plataformas linux. Inclúyalo en un filtro ettercap y aplique toda su sabiduría en ingeniería social para que una víctima u objetivo lo ejecute.
