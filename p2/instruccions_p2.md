@@ -191,7 +191,9 @@
     
     [LPORT] indica o porto onde se generará(porto que lle metestes ao metasploit).
     
-    [-f] indica o formato de salida do payload(neste caso .elf, [> payload.bin] esta parter redirige a salida do comando ao archivo "payload.bin".
+    [-f] indica o formato de salida do payload(neste caso .elf).
+    
+    [> payload.bin] esta parter redirige a salida do comando ao archivo "payload.bin".
 
  2º) Creamos un archivo .filter -> `nano mal.filter`
  
@@ -327,13 +329,57 @@
 
 
 
-### **10.-Pruebe distintas técnicas de host discovey, port scanning y OS fingerprinting sobre las máquinas del laboratorio de prácticas en IPv4. Realice alguna de las pruebas de port scanning sobre IPv6. ¿Coinciden los            servicios prestados por un sistema con los de IPv4?.**
+### **10.-Pruebe distintas técnicas de host discovey, port scanning y OS fingerprinting sobre las máquinas del laboratorio de prácticas en IPv4. Realice alguna de las pruebas de port scanning sobre IPv6.**
+
+* Para IPv4:
+
+   host discovery (para ver todos os hosts da LAN) -> `nmap -sL 10.11.48.0/23`
+   
+   port scanning para ver todos os puertos abertos de cada máquina da LAN) -> `nmap -sS 10.11.48.0/23`
+
+   OS fingerprinting (para ver o Sistema Operativo das máquinas da LAN) -> `nmap -O 10.11.48.118`
+
+* Para IPv6:
+
+   host discovery -> `nmap -6 -sL 2002:0a0b:3076::1`
+
+   port scanning -> `nmap -6 -sS 2002:0a0b:3076::1`
+
+   OS fingerprinting -> `nmap -6 -O 2002:0a0b:3076::1`
+
+* ¿Coinciden los servicios prestados por un sistema con los de IPv4?.
 
 
 
 
 
 ### **11.-Obtenga información “en tiempo real” sobre las conexiones de su máquina, así como del ancho de banda consumido en cada una de ellas.**
+
+   Instalamos:
+	
+ 	iftop -> utilizase para monitorear o tráfico de red en tiempo real en unha interfaz de rede específica
+  	vnstat -> para monitorear e generar estadísticas do uso de ancho de banda da rede
+   	tcptrack -> utilizase para facer un seguimento e análisis en tempo real das conexiones TCP na rede.
+
+   Comandos:
+
+   	iftop -i ens33 -> monitorea a interfaz especificada (si se fai un nmap como os do apartado anterior en outro terminal, vemos toda a traza que fai o nmap en tempo real):
+    			  - Primeira columna: ip origen
+			  - Segunda columna: direccion de tráfico =>(subida) <=(baixada)
+			  - Terceira columna: ip destino
+			  - Últimas tres columnas: ancho de banda nos últimos 2, 10 e 40 segundos
+        
+	vnstat -l -i ens33 -> pasados uns minuto salimos con ctrl+c e veremos unha tabla cos resultados que sacou durante a monitorizacion:
+ 			      rx: tráfico de entrada
+	  		      tx: tráfico de salida
+
+        tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
+				o que fai iftop.
+   
+
+
+
+### **13.-¿Cómo podría hacer un DoS de tipo direct attack contra un equipo de la red de prácticas? ¿Y mediante un DoS de tipo reflective flooding attack?.**
 
 
 
