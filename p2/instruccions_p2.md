@@ -364,7 +364,7 @@
    Comandos:
 
    	iftop -i ens33 -> monitorea a interfaz especificada (si se fai un nmap como os do apartado anterior en outro terminal, vemos toda a traza que fai o nmap en tempo real):
-    			  - Primeira columna: ip origen
+    		  - Primeira columna: ip origen
 			  - Segunda columna: direccion de tráfico =>(subida) <=(baixada)
 			  - Terceira columna: ip destino
 			  - Últimas tres columnas: ancho de banda nos últimos 2, 10 e 40 segundos
