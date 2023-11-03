@@ -327,6 +327,30 @@
 
 ### **9.-Pruebe alguna herramienta y técnica de detección del sniffing (preferiblemente arpon).**
 
+> IMPORTANTE: si non vamos usar arpOn paramos o servicio `systemctl stop arpon@ens33` e facemos un mask `systemctl mask arpon@ens33`. Si deixamos o servicio activo pode tirarnos a máquina
+
+1)Instalamos arpon -> `apt install arpon`
+
+2)Configuramos ruta /etc/arpon.conf. Comentamos todas as lineas que ten o archivo e añadimos a ip-mac do noso compañeiro, do router e a nosa propia (para ver a mac executamos `ifconfig` e na interfaz correspondente  miramos o campo ether):
+
+		10.11.48.135    00:50:56:97:f7:7a
+		10.11.48.1      dc:08:56:10:84:b9
+		10.11.48.118    00:50:56:97:5b:bc
+
+Comprobamos o funcionamento:
+
+## **ATACANTE:**
+
+1)Facemos un arp poisoning -> `ettercap -T -q -i ens33 -M arp:remote //10.11.48.118/ //10.11.48.1/`
+
+## **VÍCTIMA:**
+
+1)Paramos e maskeamos o servicio de arp@ens33(creo que con parando xa sirve) .
+
+2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
+
+3)Volvemos a activar o servicio apr@ensee, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do gateway xa que o arpON interven
+
 
 
 ### **10.-Pruebe distintas técnicas de host discovey, port scanning y OS fingerprinting sobre las máquinas del laboratorio de prácticas en IPv4. Realice alguna de las pruebas de port scanning sobre IPv6.**
