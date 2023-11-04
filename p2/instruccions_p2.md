@@ -366,11 +366,47 @@
 
 * Para IPv6:
 
-   host discovery -> `nmap -6 -sL 2002:0a0b:3076::1`
+  Este ano mandaronnos facer un script (.sh) para esta parte xa que executando nmap non escaneaba ben as IPV6 (o script vai un pouco lento pero non tiña tempo para optimizalo).
 
-   port scanning -> `nmap -6 -sS 2002:0a0b:3076::1`
+  Códigos do script (crealo donde queiramos):
 
-   OS fingerprinting -> `nmap -6 -O 2002:0a0b:3076::1`
+      #!/bin/bash
+
+      for j in {0..255}; do
+        ipv4="10.11.48.$j"
+        if [[ $j =~ ^[0-9]+$ ]]; then
+      	  if [[ $j -ge 0 && $j -le 15 ]]; then
+            hexadecimal=$(printf "0%x" $j)
+            ipv6="2002:0a0b:30${hexadecimal}::1"
+            echo "IPv4: $ipv4 -> IPv6: $ipv6"
+           else
+            hexadecimal=$(printf "%x" $j)
+            ipv6="2002:0a0b:30${hexadecimal}::1"
+            echo "IPv4: $ipv4 -> IPv6: $ipv6"
+           fi
+        else
+          echo "toma mango"
+        fi
+          nmap -6 -sP "${ipv6}"
+      done
+
+      for j in {0..255}; do
+         ipv4="10.11.49.$j"
+         if [[ $j =~ ^[0-9]+$ ]]; then
+           if [[ $j -ge 0 && $j -le 15 ]]; then
+              hexadecimal=$(printf "0%x" $j)
+              ipv6="2002:0a0b:30${hexadecimal}::1"
+              echo "IPv4: $ipv4 -> IPv6: $ipv6"
+           else
+              hexadecimal=$(printf "%x" $j)
+              ipv6="2002:0a0b:30${hexadecimal}::1"
+               echo "IPv4: $ipv4 -> IPv6: $ipv6"
+           fi
+         else
+             echo "toma mango"
+         fi
+         nmap -6 -sP "${ipv6}"
+      done
 
 * ¿Coinciden los servicios prestados por un sistema con los de IPv4?.
 
