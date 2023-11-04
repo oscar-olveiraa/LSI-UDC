@@ -348,7 +348,7 @@
   1)Paramos e maskeamos o servicio arp@ens33 (creo que con parando xa sirve) .
 
   2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do 
-   atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
+    atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
 
   3)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do gateway xa que o arpON interven
 
@@ -409,6 +409,51 @@
 
 
 ### **14.-Ataque un servidor apache instalado en algunas de las máquinas del laboratorio de prácticas para tratar de provocarle una DoS. Utilice herramientas DoS que trabajen a nivel de aplicación (capa 7). ¿Cómo podría           proteger dicho servicio ante este tipo de ataque? ¿Y si se produjese desde fuera de su segmento de red? ¿Cómo podría tratar de saltarse dicha protección?**
+
+  > Vamos a instalar apache2 -> `apt install apache2`
+
+ * Ataque a un servidor apache2
+
+    Un ataque DoS moi típico para páxinas web ou servidores é mandar un gran  numero de conexións/paquetes e saturalo co fin de que non funcione ou si funciona que vaia lento. No noso usaremos ferramentas como slowhttp 
+    ou slowloris:
+
+    Comando para facer un DoS -> `slowhttptest -c 200 -H -g -o slowhttp -i 10 -r 200 -t GET -u http://10.11.48.118 -x 24 -p 3`
+
+	   Flags que lle añadín ao ataque(podense añadir ou eliminar máis flags, mirar para mais info en https://linux.die.net/man/1/slowhttptest):
+	   [-c] -> significa o numero de conexions que se lle manda.
+	   [-H] -> pon a slowhttp en modo slowloris.
+ 	   [-g] -> generar archivos CSV y HTML (para ver os resultados do ataque slowhttp, podese quitar. Si podense eliminar estos archivos).
+  	   [-o] -> indica o nombre dos .csv e .html que generamos antes.
+   	   [-i] -> especifica o intervalo entre os datos de seguimento para probas lentas.
+       [-r] -> especifica a velocidade de conexión.
+       [-u] -> especifica a url á que se lle vai facer o ataque.
+       [-x] -> especifica a lonxitude máxima dos datos de seguimiento para pruebas slowloris .
+       [-p] -> especifica p intervalo de espera da resposta HTTP na conexión da sonda.
+
+ * Como parar estos ataques:
+
+    A forma para parar estos ataques é usando firewalls como Modsecurity 
+
+ * Como saltarse esas proteccions:
+
+    Para saltarnos estas limitacions, usar BOTNET ou ips aleatorias se estamos na mesma rede
+
+
+
+### **15.-Instale y configure modsecurity. Vuelva a proceder con el ataque del apartado anterior. ¿Qué acontece ahora?**
+
+
+### **16.-Buscamos información:**
+   
+   • Obtenga de forma pasiva el direccionamiento público IPv4 e IPv6 asignado a la Universidade da Coruña.
+
+   • Obtenga información sobre el direccionamiento de los servidores DNS y MX de la Universidade da Coruña.
+
+   • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
+
+   • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
+  
+   • ¿Qué gestor de contenidos se utiliza en www.usc.es?
 
 
 
