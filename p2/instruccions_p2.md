@@ -350,7 +350,7 @@
   2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do 
     atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
 
-  3)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do gateway xa que o arpON interven
+  3)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do router (dc:08:56:10:84:b9) xa que o arpOn interven
 
 
 
@@ -367,6 +367,8 @@
 * Para IPv6:
 
   Este ano mandaronnos facer un script (.sh) para esta parte xa que executando nmap non escaneaba ben as IPV6 (o script vai un pouco lento pero non tiña tempo para optimizalo).
+
+  Acordardarse de darlle permisos de execución ao script -> `chmod -x nombre.sh`
 
   Códigos do script (crealo donde queiramos):
 
@@ -408,9 +410,29 @@
          nmap -6 -sP "${ipv6}"
       done
 
+  Mensaje que ten que sacar o nmap:
+
+  		.
+		.
+  		IPv4: 10.11.49.73 -> IPv6: 2002:0a0b:3049::1
+		Starting Nmap 7.93 ( https://nmap.org ) at 2023-11-04 16:24 CET
+		Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+		Nmap done: 1 IP address (0 hosts up) scanned in 3.04 seconds
+		IPv4: 10.11.49.74 -> IPv6: 2002:0a0b:304a::1
+		Starting Nmap 7.93 ( https://nmap.org ) at 2023-11-04 16:24 CET
+		Nmap scan report for 2002:a0b:304a::1
+		Host is up (0.0020s latency).
+		Nmap done: 1 IP address (1 host up) scanned in 0.04 seconds
+  		.
+  		.
+
 * ¿Coinciden los servicios prestados por un sistema con los de IPv4?.
 
+  Coincide xa que:
 
+  -Encaminamiento de paquetes: IPv4 é responsable de encaminar paquetes de datos desde unha fuente a un destino a través de unha red de routers. Garantiza que os paquetes cheeguen ao seu destino correcto.
+  
+  -Detección de errores: IPv4 inclúe un campo de suma de verificación (checksum) que permite a detección de errores nos paquetes de datos durante o seu tránsito pola rede.
 
 
 
@@ -478,6 +500,33 @@
 
 ### **15.-Instale y configure modsecurity. Vuelva a proceder con el ataque del apartado anterior. ¿Qué acontece ahora?**
 
+Para instalar modsecurity -> https://www.linode.com/docs/guides/securing-apache2-with-modsecurity/#setting-up-the-owasp-modsecurity-core-rule-set
+
+Anotacións sobre ese enlace:
+
+   -No archivo da ruta */etc/modsecurity/modsecurity.conf* añadin as seguintes 4 líneas:
+
+  	SecRuleEngine On
+	SecConnEngine On
+	SecConnReadStateLimit 25
+	SecConnWriteStateLimit 25
+	-------------------------------
+ 	SecRuleEngine -> cando se establece en "On", habilitase as reglas de ModSecurity. Esto significa que ModSecurity aplicará as reglas 
+  	definidas na súa configuración para monitorear e protexer as solicitudes e respostas entrantes do servidor.
+   	
+	SecConnEngine -> cando se establece en  "On", habilitase o motor de xestión de conexións en ModSecurity. Con el ten que etar configurado
+ 	o liminte de lecturas e escrituras (SecConnReadStateLimit/SecConnWriteStateLimit)
+
+   -Para OWASP -> importante clonar o repositorio en /usr/share/modsecurity-crs porque si non, non o encontra.
+
+   -No archivo da ruta */etc/apache2/mods-available/security2.conf* hai que añadir estas lineas:
+
+   	SecDataDir /var/cache/modsecurity
+        Include /usr/share/modsecurity-crs/crs-setup.conf
+        Include /usr/share/modsecurity-crs/rules/*.conf
+
+ * Comprobación do seu funcionamento 
+   
 
 ### **16.-Buscamos información:**
    
