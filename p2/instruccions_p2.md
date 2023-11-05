@@ -634,17 +634,51 @@ Anotacións sobre ese enlace:
    
    • Obtenga de forma pasiva el direccionamiento público IPv4 e IPv6 asignado a la Universidade da Coruña.
 
+   	1º)Instalamos host -> apt install host
+
+    2º)Executamos o comando -> host udc.es
+
+       Salida:
+
+      	udc.es has address 193.144.53.84
+	        udc.es has IPv6 address 2001:720:121c:e000::203
+	        udc.es mail is handled by 10 udc-es.mail.protection.outlook.com.
+
    • Obtenga información sobre el direccionamiento de los servidores DNS y MX de la Universidade da Coruña.
 
-   • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
+   	1º)Instalamos dnsutils -> apt install dnsutils
+
+    2º)Para servidores DNS -> dig [+short] DNS udc.es
+       Para servidores MX(correos) -> dig [+short] MX udc.es
+       Consulta os servidores configurados en /etc/resolv.conf
+       [+short] : para reducir a información que se saca por pantalla
 
    • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
+
+   	Unha transeferencia de zona sobre servidores DNS é un proceso no que un servidor DNS obtén unha copia completa 
+    da base de datos de zona de outro servidor DNS polo que non se pode facer xa que están configurados para eso. 
+	Solamente xente autorizada.
+
+  	Para obter os dominios -> nmap -sL 193.144.53.84/20 | grep udc.es
   
    • ¿Qué gestor de contenidos se utiliza en www.usc.es?
+
+    1º)Instalamos whatweb(fai un escaneo de aplicacións web e enseña info sobre as tecnoloxías e servizos utilizados
+       en un sitio web) -> apt install whatweb
+
+ 	2º)Executamos o comando -> whatweb www.usc.es
 
 
 
 ### **17.-Trate de sacar un perfil de los principales sistemas que conviven en su red de prácticas, puertos accesibles, fingerprinting, etc.**
+
+   Sacamos info da seguinte maneira:
+
+   1º forma: Executamos `nmap -A 10.11.48.1`  |  `nmap -A 10.11.48.0/23 > every_nmap.txt`
+   			
+   2º forma: facemos un `nslookup udc.es` (con esto sabemos a ip do servidor da udc)
+             Excutamos `nmap -sS 10.8.12.49` (vemos portos abertos)
+	
 
 
 ### **18.-Realice algún ataque de “password guessing” contra su servidor ssh y compruebe que el analizador de logs reporta las correspondientes alarmas**
