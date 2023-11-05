@@ -341,16 +341,16 @@
 
   ### **ATACANTE:**
 
-  1)Facemos un arp poisoning -> `ettercap -T -q -i ens33 -M arp:remote //10.11.48.118/ //10.11.48.1/`
+  1º)Facemos un arp poisoning -> `ettercap -T -q -i ens33 -M arp:remote //10.11.48.118/ //10.11.48.1/`
 
   ### **VÍCTIMA:**
 
-  1)Paramos e maskeamos o servicio arp@ens33 (creo que con parando xa sirve) .
+  1º)Paramos e maskeamos o servicio arp@ens33 (creo que con parando xa sirve) .
 
-  2)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do 
+  2º)Miramos a tabla de arp -> `arp -a`. Si temos mais ips das que nos interesa borramos a caché arp con `ip -s -s neigh flush all`. Localizamos o gateway e a súa mac ao recibir un arp spoofing ten que ser a do 
     atacante(ten lóxica xa que ao recibir un ataque MITM, quen está no medio é o atacante en vez do router)
 
-  3)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do router (dc:08:56:10:84:b9) xa que o arpOn interven
+  3º)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do router (dc:08:56:10:84:b9) xa que o arpOn interven
 
 
 
@@ -500,6 +500,15 @@
 
 ### **15.-Instale y configure modsecurity. Vuelva a proceder con el ataque del apartado anterior. ¿Qué acontece ahora?**
 
+> IMPORTANTE: A nos este ano mandaronnos instalar ModSecurity, ModEvasive e Mod_antiloris para crear redundancia
+
+### MODSECURITY
+
+> Comandos chuquios para modsecurity(cando se executa un de estos dous comandos hai que facer un `systemctl restart apache2`:
+>            `a2enmod security2` -> activa modsecurity
+>            `a2dismod security2` -> desactiva modsecurity
+> Fijarse que cando activamos modsecurity na ruta */etc/apache2/mods-enabled/* está o archivo security2.conf e cando se desactiva está en */etc/apache2/mods-avaliable*
+
 Para instalar modsecurity -> https://www.linode.com/docs/guides/securing-apache2-with-modsecurity/#setting-up-the-owasp-modsecurity-core-rule-set
 
 Anotacións sobre ese enlace:
@@ -522,12 +531,98 @@ Anotacións sobre ese enlace:
    -No archivo da ruta */etc/apache2/mods-available/security2.conf* hai que añadir estas lineas:
 
    	SecDataDir /var/cache/modsecurity
-        Include /usr/share/modsecurity-crs/crs-setup.conf
-        Include /usr/share/modsecurity-crs/rules/*.conf
+    Include /usr/share/modsecurity-crs/crs-setup.conf
+    Include /usr/share/modsecurity-crs/rules/*.conf
 
- * Comprobación do seu funcionamento 
+   -No enlance, o archivo da ruta /etc/apache2/sites-enabled/ chámase 'example.com.conf'. No noso caso é '000-default.conf'
+
+ * Comprobación do seu funcionamento con slowhttp(ten que ser o atacante diferente ao cliente, si se fai un asi mismo o ataque non funciona ben creo):
+
+     ### **ATACANTE**
+
+      1º) Executa o seguinte comando -> `slowhttptest -c 200 -H -g -o slowhttp -i 10 -r 200 -t GET -u http://10.11.48.135 -x 24 -p 3`
+  
+     ### **VÍCTIMA**
    
+      > Pódese usar un navegador por terminal (por exemplo lynx http://10.11.48.x:80) ou facer `wget 10.11.48.x` (ter coidado con esto xa que descargase os index do server, borralos xa que si hai moitos ocupan moito)
+ 
+      1º) Antes de que che ataque mirar que funcione o server (`wget 10.11.48.135`):
 
+	    --2023-11-04 17:25:48--  http://10.11.48.135/
+	    Conectando con 10.11.48.135:80... conectado.
+	    Petición HTTP enviada, esperando respuesta... 200 OK
+	    Longitud: 10701 (10K) [text/html]
+	    Grabando a: «index.html»
+
+	    index.html               100%[==================================>]  10,45K  --.-KB/s    en 0s
+
+	    2023-11-04 17:25:48 (122 MB/s) - «index.html» guardado [10701/10701]
+
+      2º) Unha vez que che atacan tendría que saltarche o mismo que arriba.
+
+
+  * Comprobación do seu funcionamento con slowloris (python e pearl)(ten que ser o atacante diferente ao cliente, si se fai un asi mismo o ataque non funciona ben creo):
+
+     ### **ATACANTE**
+    
+      > Ou faise slowloris con python ou con pearl, os dous á vez no
+      > (Recomendación: crear un directorio por exemplo en /home/lsi para cada un de estos dous ataques)
+
+      -Con Python:
+
+       1º) Descargase o archivo -> `git clone https://github.com/gkbrk/slowloris`
+
+       2º) Executar comando (non me acordo si habia que darlle permisos, mirar con `ls -l`) -> `./slowloris 10.11.48.x`
+
+      -Con Pearl:
+    
+       1º) Descargar archivo -> `git clone https://github.com/GHubgenius/slowloris.pl`
+
+       2º) Mirar en README do resposiroio os pasos indicados para facer o ataque.
+
+    ### **VÍCTIMA**
+
+      1º) Facer unha petición ao server como no apartado de slowhttp para ver que non se caeu e rezar 🙏
+
+### MODEVASIVE
+
+> Comandos chuquios para modsecurity(cando se executa un de estos dous comandos hai que facer un `systemctl restart apache2`:
+>            `a2enmod security2` -> activa modsecurity
+>            `a2dismod security2` -> desactiva modsecurity
+> Fijarse que cando activamos modevasive na ruta */etc/apache2/mods-enabled/* está o archivo evasive.conf e cando se desactiva está en */etc/apache2/mods-avaliable*
+> IMPORTANTE: para verificar o seu funcionamento temos que desactivar modsecurity e comentar a línea ' SecRuleEngine On' da ruta /etc/apache2/sites-enabled/000-default.conf xa que si non, non podemos facer  un > > > 
+> `systemctl restart apache2` .
+
+
+1º) Para instalar modevasive -> `apt install libapache2-mod-evasive` 
+
+2º) Activamos modevasive(en comandos chuquios)
+
+3º) Modificamos o archivo da ruta */etc/apache2/mods-enabled/evasive.conf*:
+
+    <IfModule mod_evasive20.c>
+    DOSHashTableSize    3097
+    DOSPageCount        2
+    DOSSiteCount        50
+    DOSPageInterval     1
+    DOSSiteInterval     1
+    DOSBlockingPeriod   10
+
+    #DOSEmailNotify      you@yourdomain.com
+    DOSSystemCommand "sbin/iptables –A INPUT –p tcp –dport 80 –s %s –j DROP"
+    #DOSSystemCommand    "su - someuser -c '/sbin/... %s ...'"
+    DOSLogDir           "/var/log/mod_evasive"
+    </IfModule>
+
+4º) Comprobamos o seu funcionamento igual que como en modsecurity, solo que probamos SOLO o ataque slowhttp, xa que temos a hipótesis de que os ataques slowloris non o soporta, por eso necesitamos un mod_antiloris para que se cumpla esa redundancia (si por unha casualidad non funciona modsecurity, un modEvasive pararía os slowhttp e o mod_antiloris pararía os slowloris)
+
+
+### MOD_ANTILORIS
+
+	
+
+	
+   
 ### **16.-Buscamos información:**
    
    • Obtenga de forma pasiva el direccionamiento público IPv4 e IPv6 asignado a la Universidade da Coruña.
