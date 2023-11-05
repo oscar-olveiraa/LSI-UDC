@@ -206,7 +206,7 @@
 	      msg("replaced href.\n");
      }
 
- 3º) Procesamos o archivo de filtrado(é como si compilaramos o ett.filter) -> `etterfilter ett.filter -o ig.ef`
+ 3º) Procesamos o archivo de filtrado(é como si compilaramos o ett.filter) -> `etterfilter mal.filter -o ig.ef`
 
      [etterfilter] é unha ferramenta de ettercap que procesa archivos de filtro (os archivos de filtro procesanse para aplicar reglas específicas 
      aos datos ou ao tráfico que se está filtrando).
