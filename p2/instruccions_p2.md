@@ -505,11 +505,14 @@
 ### MODSECURITY
 
 > Comandos chuquios para modsecurity(cando se executa un de estos dous comandos hai que facer un `systemctl restart apache2`:
->            `a2enmod security2` -> activa modsecurity
->            `a2dismod security2` -> desactiva modsecurity
+> 
+> `a2enmod security2` -> activa modsecurity
+> 
+> `a2dismod security2` -> desactiva modsecurity
+> 
 > Fijarse que cando activamos modsecurity na ruta */etc/apache2/mods-enabled/* está o archivo security2.conf e cando se desactiva está en */etc/apache2/mods-avaliable*
 
-Para instalar modsecurity -> https://www.linode.com/docs/guides/securing-apache2-with-modsecurity/#setting-up-the-owasp-modsecurity-core-rule-set
+Instalamos modsecurity -> https://www.linode.com/docs/guides/securing-apache2-with-modsecurity/#setting-up-the-owasp-modsecurity-core-rule-set
 
 Anotacións sobre ese enlace:
 
@@ -578,7 +581,7 @@ Anotacións sobre ese enlace:
     
        1º) Descargar archivo -> `git clone https://github.com/GHubgenius/slowloris.pl`
 
-       2º) Mirar en README do resposiroio os pasos indicados para facer o ataque.
+       2º) Mirar en README do respositorio os pasos indicados para facer o ataque.
 
     ### **VÍCTIMA**
 
@@ -586,11 +589,15 @@ Anotacións sobre ese enlace:
 
 ### MODEVASIVE
 
-> Comandos chuquios para modsecurity(cando se executa un de estos dous comandos hai que facer un `systemctl restart apache2`:
->            `a2enmod security2` -> activa modsecurity
->            `a2dismod security2` -> desactiva modsecurity
+> Comandos chuquios para modsecurity(cando se executa un de estos dous comandos hai que facer un `systemctl restart apache2`):
+> 
+> `a2enmod evasive` -> activa modEvasive
+> 
+> `a2dismod evasive` -> desactiva modEvasive
+> 
 > Fijarse que cando activamos modevasive na ruta */etc/apache2/mods-enabled/* está o archivo evasive.conf e cando se desactiva está en */etc/apache2/mods-avaliable*
-> IMPORTANTE: para verificar o seu funcionamento temos que desactivar modsecurity e comentar a línea ' SecRuleEngine On' da ruta /etc/apache2/sites-enabled/000-default.conf xa que si non, non podemos facer  un > > > 
+> 
+> IMPORTANTE: para verificar o seu funcionamento temos que desactivar modsecurity e comentar a línea ' SecRuleEngine On' da ruta /etc/apache2/sites-enabled/000-default.conf xa que si non, non podemos facer  un 
 > `systemctl restart apache2` .
 
 
@@ -614,7 +621,7 @@ Anotacións sobre ese enlace:
     DOSLogDir           "/var/log/mod_evasive"
     </IfModule>
 
-4º) Comprobamos o seu funcionamento igual que como en modsecurity, solo que probamos SOLO o ataque slowhttp, xa que temos a hipótesis de que os ataques slowloris non o soporta, por eso necesitamos un mod_antiloris para que se cumpla esa redundancia (si por unha casualidad non funciona modsecurity, un modEvasive pararía os slowhttp e o mod_antiloris pararía os slowloris)
+4º) Comprobamos o seu funcionamento igual que como en modsecurity, solo que probamos SOLO o ataque slowhttp, xa que temos a hipótesis de que os ataques slowloris non o soporta, por eso necesitamos un mod_antiloris para que se cumpla esa redundancia (si por unha casualidad non funciona modsecurity, o modEvasive pararía os slowhttp e o mod_antiloris pararía os slowloris)
 
 
 ### MOD_ANTILORIS
