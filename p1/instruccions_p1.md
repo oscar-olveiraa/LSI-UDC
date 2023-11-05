@@ -620,7 +620,7 @@ IP->10.11.48.135
 
 * Probamos a cola:
 
-     1-O servidor desactiva en este orde os servicios -> `systemctl stop syslog` `systemctl stops syslog.socket` `systemctl stop rsyslog`
+     1-O servidor desactiva en este orde os servicios -> `systemctl stop syslog && systemctl stops syslog.socket && systemctl stop rsyslog`
   
      2-O cliente manda un par de mensaxes e o servidor comproba que non lle chegen
 
