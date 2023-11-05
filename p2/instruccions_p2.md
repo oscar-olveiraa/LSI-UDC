@@ -219,7 +219,7 @@
 
  6º) Mentras facemos o sniffing, en outro shell executamos o Metasploit e executamos os comandos que aparecen despois de "msf6 >" -> `msfconsole`
 
-       Metasploit tip: Use the analyze command to suggest runnable modules for hosts
+    Metasploit tip: Use the analyze command to suggest runnable modules for hosts
 
 
               .:okOOOkdc'           'cdkOOOko:.
@@ -244,7 +244,7 @@
                           .grg
                             .
 
-       =[ metasploit v6.3.36-dev                          ]
+    =[ metasploit v6.3.36-dev                          ]
     + -- --=[ 2362 exploits - 1227 auxiliary - 413 post       ]
     + -- --=[ 1388 payloads - 46 encoders - 11 nops           ]
     + -- --=[ 9 evasion                                       ]
@@ -456,8 +456,8 @@
  			      rx: tráfico de entrada
 	  		      tx: tráfico de salida
 
-        tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
-				o que fai iftop.
+     tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
+	                     o que fai iftop.
    
 
 
@@ -472,8 +472,8 @@
 
  * Ataque a un servidor apache2
 
-    Un ataque DoS moi típico para páxinas web ou servidores é mandar un gran  numero de conexións/paquetes e saturalo co fin de que non funcione ou si funciona que vaia lento. No noso usaremos ferramentas como slowhttp 
-    ou slowloris:
+    Un ataque DoS moi típico para páxinas web ou servidores é mandar un gran  numero de conexións/paquetes e saturalo co fin de que non funcione ou si funciona que vaia lento. No noso usaremos ferramentas como 
+    slowhttptest ou slowloris:
 
     Comando para facer un DoS -> `slowhttptest -c 200 -H -g -o slowhttp -i 10 -r 200 -t GET -u http://10.11.48.118 -x 24 -p 3`
 
@@ -641,6 +641,19 @@ Anotacións sobre ese enlace:
    • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
   
    • ¿Qué gestor de contenidos se utiliza en www.usc.es?
+
+
+
+### **17.-Trate de sacar un perfil de los principales sistemas que conviven en su red de prácticas, puertos accesibles, fingerprinting, etc.**
+
+
+### **18.-Realice algún ataque de “password guessing” contra su servidor ssh y compruebe que el analizador de logs reporta las correspondientes alarmas**
+
+
+### **19.-Reportar alarmas está muy bien, pero no estaría mejor un sistema activo, en lugar de uno pasivo. Configure algún sistema activo, por ejemplo OSSEC, y pruebe su funcionamiento ante un “password guessing”.**
+
+
+### **20.-Supongamos que una máquina ha sido comprometida y disponemos de un fichero con sus mensajes de log. Procese dicho fichero con OSSEC para tratar de localizar evidencias de lo acontecido (“post mortem”). Muestre las alertas detectadas con su grado de criticidad, así como un resumen de las mismas.**
 
 
 
