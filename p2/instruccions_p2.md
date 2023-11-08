@@ -683,6 +683,16 @@ Anotacións sobre ese enlace:
 
 ### **18.-Realice algún ataque de “password guessing” contra su servidor ssh y compruebe que el analizador de logs reporta las correspondientes alarmas**
 
+Para usar medusa vamos a usar diccionarios que conteñen passwords e le recorrerá ese ficheiro hasta dar co password correspondente a ese usuario (ataques de forza bruta).
+
+Os diccionarios podemos facer nos un á man (un .txt con unhas cuantas contraseñas) ou coller un de internet ([click](https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials)).
+
+Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
+
+1) Instalamos medusa -> `apt install medusa`
+
+2) No meu caso usei un .txt do github do enlace que ten 'click'. Para importar solo o diccionario, vamos dentro de un txt e en raw copiamos o enlace e clonamos -> `` 
+
 
 ### **19.-Reportar alarmas está muy bien, pero no estaría mejor un sistema activo, en lugar de uno pasivo. Configure algún sistema activo, por ejemplo OSSEC, y pruebe su funcionamiento ante un “password guessing”.**
 
