@@ -708,7 +708,7 @@ Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
 	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 123456 (2 of 10001 complete)
 	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 12345678 (3 of 10001 complete)
 	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: 1234 (4 of 10001 complete)
-	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: XXXXXXXXX (5 of 10001 complete)
+	ACCOUNT CHECK: [ssh] Host: 10.11.48.118 (1 of 1, 0 complete) User: lsi (1 of 1, 0 complete) Password: qwerty (5 of 10001 complete)
 	ACCOUNT FOUND: [ssh] Host: 10.11.48.118 User: lsi Password: blablablabla [SUCCESS]
 
 
