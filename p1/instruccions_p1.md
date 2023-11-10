@@ -510,6 +510,8 @@ IP->10.11.48.135
 
    > Antes de empezar, hai que instalar ntpsec -> `apt-get install ntpsec`
 
+   > Tamen instalamos o sincronizador de ntp -> `apt install ntpdate`
+
  1-Configuración:
 
    * Configuracion como servidor de */etc/ntpsec/ntp.conf*. Cousas modificadas: 'tos maxclock 7', 'tos minclock 4 minsane 1', todos os pool comentados
