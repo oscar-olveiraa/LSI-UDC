@@ -455,7 +455,7 @@ IP->10.11.48.135
 
    * Configuracion hosts.deny en */etc*. Añadir ao final do archivo as lineas:
 
-     	 ALL: ALL: spawn echo `bin/date`\: intento conectar %a con %A [DENEGADA] >> /home/1si/logssh
+     	 ALL: ALL: twist echo `bin/date`\: intento conectar %a con %A [DENEGADA] >> /home/1si/logssh
 
    * TCP Wrapper enfócase en controlar o acceso a servizos de red en un sistema específico, un firewall é unha solución de seguridad máis amplia. Pode protexer una rede completa, un sistema contra ameazas ou controlar
      o tráfico de rede.
