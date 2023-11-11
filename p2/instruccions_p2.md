@@ -553,13 +553,13 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
 ### **13.-¿Cómo podría hacer un DoS de tipo direct attack contra un equipo de la red de prácticas? ¿Y mediante un DoS de tipo reflective flooding attack?.**
 
-No DDos de tipo direct attack faise atacando ao porto ssh, 22. Si se encontra conectado, atacarase a todos puertos que teña abertor. No ataque de tipo reflective flooding compromete un tercer
+No DDos de tipo direct attack faise atacando ao porto ssh, 22. Si se encontra conectado, atacarase a todos portos que teña abertos. No ataque de tipo reflective flooding compromete un tercer
 equipo(routers, servidores DNS, amplificadores...) que ataque á víctima. Envías paquetes a toda a red para que solo un equipo conteste e se sature.
 
 Direct attack: Envío masivo de paquetes de maneira directa á víctima.
 
-Reflective looding attack: utilizase nodos intermedios como amplificadores. o atacante envía paquetes que requiren resposta aos amplificadores con ip orixen a da víctima (os amplificadores
-responderán unha barbarid de veces á máquina víctima). Por exemplo Fraggle
+Reflective looding attack: utilizase nodos intermedios. O atacante envía paquetes que requiren resposta aos amplificadores con ip orixen a da víctima (os amplificadores
+responderán unha barbarid de veces á máquina víctima). Por exemplo un ataque Fraggle
 
 
 
