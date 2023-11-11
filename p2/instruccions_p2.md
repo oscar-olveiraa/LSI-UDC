@@ -493,7 +493,7 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
    > IMPORTANTE: ter a hora ben posta, si a temos mal non funciona xa que fai calculos a tempo real
 
-   • **Instale prometheus y node_exporter y configúrelos para recopilar todo tipo de métricas de su máquina linux.**
+• **Instale prometheus y node_exporter y configúrelos para recopilar todo tipo de métricas de su máquina linux.**
 
    [Enlace](https://prometheus.io/download/) para instalar prometheus.
 
@@ -503,46 +503,52 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
    	1)O apartado 'Configuring Prometheus to monitor itself' non se lle fai caso
 
-    	2)Dinos que hai que abrir tres terminales. Con iniciar un e executar o node_exporter en un puerto sirve
+    2)Dinos que hai que abrir tres terminales. Con iniciar un e executar o node_exporter en un puerto sirve
 
-        3)Cando editamos o prometheus.yml para o node_exporter, ao solo poñer un puerto configuramolo asi (ten que ir no scrape_config do prometheus)
+    3)Cando editamos o prometheus.yml para o node_exporter, ao solo poñer un puerto configuramolo asi (ten que ir no scrape_config do prometheus)
 
   		- job_name:       'node'
 
-    			# Override the global default and scrape targets from this job every 5 seconds.
+    		# Override the global default and scrape targets from this job every 5 seconds.
    		 	scrape_interval: 5s
 
    		 	static_configs:
-      				- targets: ['localhost:8080']
-       				  labels:
-          			    group: 'production'
+      		   - targets: ['localhost:8080']
+       		     labels:
+          		       group: 'production'
 
-        4)Para executar o node_exporter ten que ser ca ip do localhost
+    4)Para executar o node_exporter ten que ser ca ip do localhost
 
-        5)Hai que crear un archivo prometheus.rules.yml no directorio do prometheus
+    5)Hai que crear un archivo prometheus.rules.yml no directorio do prometheus
 	
    
-   • Posteriormente instale grafana y agregue como fuente de datos las métricas de su equipo de prometheus.
+• Posteriormente instale grafana y agregue como fuente de datos las métricas de su equipo de prometheus.
 
    [Enlace](https://www.server-world.info/en/note?os=Debian_12&p=grafana) para instalar grafana.
 
    Para añadir metricas do prometheus:
 
-   	1)Vamos a 'add your first data source' e pinchamos 'Prometheus'
+     1)Vamos a 'add your first data source' e pinchamos 'Prometheus'
 
-    	2)Añadimos na pestaña 'Connection' http://127.0.0.1:9090 e abaixo pinchamos 'save and test'
+     2)Añadimos na pestaña 'Connection' http://127.0.0.1:9090 e abaixo pinchamos 'save and test'
 
-     	3)No cuadro onde pon 'No data' si estamos encima vamos aos tres puntos da dereita e exportamos
+     3)No cuadro onde pon 'No data' si estamos encima vamos aos tres puntos da dereita e exportamos
 
-      	4)En metrics eleximos unha metrica de prometheus e runeamos
+     4)En metrics eleximos unha metrica de prometheus e runeamos
 
-		
+
+• Importe vía grafana el dashboard 1860.
+
+    1)No buscador de arriba da pantalla principar poñemos 'import dashboard'
+
+ 	2)Pinchamos e en 'find and import dashboard' poñemos 1860 e cargamos. Na seguinte ventana apareceria graficas e métricas sobre o servidor de prometheus
    
-   • Importe vía grafana el dashboard 1860.
-   
-   • En los ataques de los apartados m y n busque posibles alteraciones en las métricas visualizadas.**
-   
+• En los ataques de los apartados m y n busque posibles alteraciones en las métricas visualizadas.**
 
+   	1)Facemos un slowhttptest -c 8000 -H -g -o slowhttp -i 10 -r 200 -t GET -u http://127.0.0.1:8080 -x 24 -p 3
+
+    2)Refrescamos a páxina das gráficas e veriamos ao filtrar nos ultimos 5 minutos, aparecen picos da nosa cpu (alta carga de paquetes en poucos segundos)
+   
 
 
 ### **13.-¿Cómo podría hacer un DoS de tipo direct attack contra un equipo de la red de prácticas? ¿Y mediante un DoS de tipo reflective flooding attack?.**
