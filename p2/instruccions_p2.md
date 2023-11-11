@@ -765,16 +765,21 @@ Comprobación:
 
 2º)Vai chegar ao cuarto intento e vai quedar parado, eso quere decir que estas baneado e non podes intentalo hasta dentro de 600 segundos(podese cambiar este valor). 
 
-   Para desbanear manulmente -> `/var/ossec/active-response/bin/host-deny.sh delete - 10.11.48.135`
-   
-   				`/var/ossec/active-response/bin/firewall-drop.sh delete - 10.11.48.135`
+   Para desbanear manulmente -> `/var/ossec/active-response/bin/host-deny.sh delete - 10.11.48.135` e `/var/ossec/active-response/bin/firewall-drop.sh delete - 10.11.48.135`
 
 3º)Podemos mirar os logs no archivo que se creou con medusa ou tamén en estos dous directorios: */var/ossec/logs/ossec.log* e */var/ossec/logs/active-responses.log*
 
+Modificacion dos intentos de OSSEC:
 
 
 
 ### **20.-Supongamos que una máquina ha sido comprometida y disponemos de un fichero con sus mensajes de log. Procese dicho fichero con OSSEC para tratar de localizar evidencias de lo acontecido (“post mortem”). Muestre las alertas detectadas con su grado de criticidad, así como un resumen de las mismas.**
+
+En este [enlace](https://www.ossec.net/docs/docs/programs/ossec-logtest.html#example-2-using-ossec-for-the-forensic-analysis-of-log-files) hai info sobre as alertas e logs de OSSEC
+
+Para ver info sobre os ataques de password guessing que se fixeron á máquina -> `cat /var/log/auth.log | /var/ossec/bin/ossec-logtest -a` 
+
+Para ver un resumen das ips que che intentaros facer ataques, as rules de OSSEC que saltaron ou niveles de OSSEC -> `cat /var/log/auth.log | /var/ossec/bin/ossec-logtest -a |/var/ossec/bin/ossec-reportd`
 
 
 
