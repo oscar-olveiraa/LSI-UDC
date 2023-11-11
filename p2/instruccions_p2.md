@@ -484,14 +484,14 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
  			      rx: tráfico de entrada
 	  		      tx: tráfico de salida
 
-     tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
-	                     o que fai iftop.
+    tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
+	                        o que fai iftop.
 
 
 
-### **Monitorizamos nuestra infraestructura.:**
+### **12.-Monitorizamos nuestra infraestructura.:**
 
-   > IMPORTANTE: ter a hora ben posta, si a temos mal non funciona xa que fai calculos a tempo real
+> IMPORTANTE: ter a hora ben posta, si a temos mal non funciona xa que fai calculos a tempo real
 
 • **Instale prometheus y node_exporter y configúrelos para recopilar todo tipo de métricas de su máquina linux.**
 
@@ -543,7 +543,7 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
  	2)Pinchamos e en 'find and import dashboard' poñemos 1860 e cargamos. Na seguinte ventana apareceria graficas e métricas sobre o servidor de prometheus
    
-• En los ataques de los apartados m y n busque posibles alteraciones en las métricas visualizadas.**
+• En los ataques de los apartados m y n busque posibles alteraciones en las métricas visualizadas.
 
    	1)Facemos un slowhttptest -c 8000 -H -g -o slowhttp -i 10 -r 200 -t GET -u http://127.0.0.1:8080 -x 24 -p 3
 
@@ -552,6 +552,15 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
 
 ### **13.-¿Cómo podría hacer un DoS de tipo direct attack contra un equipo de la red de prácticas? ¿Y mediante un DoS de tipo reflective flooding attack?.**
+
+No DDos de tipo direct attack faise atacando ao porto ssh, 22. Si se encontra conectado, atacarase a todos puertos que teña abertor. No ataque de tipo reflective flooding compromete un tercer
+equipo(routers, servidores DNS, amplificadores...) que ataque á víctima. Envías paquetes a toda a red para que solo un equipo conteste e se sature.
+
+Direct attack: Envío masivo de paquetes de maneira directa á víctima.
+
+Reflective looding attack: utilizase nodos intermedios como amplificadores. o atacante envía paquetes que requiren resposta aos amplificadores con ip orixen a da víctima (os amplificadores
+responderán unha barbarid de veces á máquina víctima). Por exemplo Fraggle
+
 
 
 
