@@ -721,7 +721,7 @@ Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
 
 2º)No meu caso usei un .txt do github do enlace que ten 'click'. Para importar solo o diccionario, vamos dentro de un txt e en raw copiamos o enlace e descargamolo -> `wget enlace`
 
-3º)Dentro do directorio onde temos o diccionario executamos o seguinte comando -> `medusa -h 10.11.48.118 -u lsi -P 10k-most-common.txt -M ssh -f -O logpassguessing.log`
+3º)Dentro do directorio onde temos o diccionario executamos o seguinte comando -> `medusa -h 10.11.48.135 -u lsi -P 10k-most-common.txt -M ssh -f -O logpassguessing.log`
 
 	[-h] -> especificar a dirección IP
  	[-u] -> especificar o nombre da máquina
@@ -742,6 +742,36 @@ Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
 
 
 ### **19.-Reportar alarmas está muy bien, pero no estaría mejor un sistema activo, en lugar de uno pasivo. Configure algún sistema activo, por ejemplo OSSEC, y pruebe su funcionamiento ante un “password guessing”.**
+
+Instalacion de OSSEC:
+
+1º)`apt -y install  wget git vim unzip make gcc build-essential php php-cli php-common libapache2-mod-php apache2-utils inotify-tools libpcre2-dev zlib1g-dev  libz-dev libssl-dev libevent-dev build-essential libsystemd-dev`
+
+2º)`wget https://github.com/ossec/ossec-hids/archive/refs/tags/3.7.0.zip`
+
+3º)`mv 3.7.0.zip  ossec-hids-3.7.0.zip`
+
+4º)`unzip ossec-hids-3.7.0.zip`
+
+5º)`cd ossec-hids-3.7.0`
+
+6º)`./install.sh` 
+
+Para iniciar OSSEC -> `/var/ossec/bin/ossec-control start`
+
+Comprobación:
+
+1º)Lanzamos un ataque con medusa -> `medusa -h 10.11.48.135 -u lsi -P 10k-most-common.txt -M ssh -f -O logpassguessing.log`
+
+2º)Vai chegar ao cuarto intento e vai quedar parado, eso quere decir que estas baneado e non podes intentalo hasta dentro de 600 segundos(podese cambiar este valor). 
+
+   Para desbanear manulmente -> `/var/ossec/active-response/bin/host-deny.sh delete - 10.11.48.135`
+   
+   				`/var/ossec/active-response/bin/firewall-drop.sh delete - 10.11.48.135`
+
+3º)Podemos mirar os logs no archivo que se creou con medusa ou tamén en estos dous directorios: */var/ossec/logs/ossec.log* e */var/ossec/logs/active-responses.log*
+
+
 
 
 ### **20.-Supongamos que una máquina ha sido comprometida y disponemos de un fichero con sus mensajes de log. Procese dicho fichero con OSSEC para tratar de localizar evidencias de lo acontecido (“post mortem”). Muestre las alertas detectadas con su grado de criticidad, así como un resumen de las mismas.**
