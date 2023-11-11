@@ -486,6 +486,61 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
      tcptrack -d -i ens33 -> si o executamos e en outro terminal en paralelo facemos un nmap como os do apartado anterior(nmap traballa con TCP) veremos algo parecido a
 	                     o que fai iftop.
+
+
+
+### **Monitorizamos nuestra infraestructura.:**
+
+   > IMPORTANTE: ter a hora ben posta, si a temos mal non funciona xa que fai calculos a tempo real
+
+   • **Instale prometheus y node_exporter y configúrelos para recopilar todo tipo de métricas de su máquina linux.**
+
+   [Enlace](https://prometheus.io/download/) para instalar prometheus.
+
+   [Enlace](https://prometheus.io/download/#node_exporter) para instalacion de node_exporter.
+
+   Para [info](https://prometheus.io/docs/prometheus/latest/getting_started/) sobre prometheus. Observacións:
+
+   	1)O apartado 'Configuring Prometheus to monitor itself' non se lle fai caso
+
+    	2)Dinos que hai que abrir tres terminales. Con iniciar un e executar o node_exporter en un puerto sirve
+
+        3)Cando editamos o prometheus.yml para o node_exporter, ao solo poñer un puerto configuramolo asi (ten que ir no scrape_config do prometheus)
+
+  		- job_name:       'node'
+
+    			# Override the global default and scrape targets from this job every 5 seconds.
+   		 	scrape_interval: 5s
+
+   		 	static_configs:
+      				- targets: ['localhost:8080']
+       				  labels:
+          			    group: 'production'
+
+        4)Para executar o node_exporter ten que ser ca ip do localhost
+
+        5)Hai que crear un archivo prometheus.rules.yml no directorio do prometheus
+	
+   
+   • Posteriormente instale grafana y agregue como fuente de datos las métricas de su equipo de prometheus.
+
+   [Enlace](https://www.server-world.info/en/note?os=Debian_12&p=grafana) para instalar grafana.
+
+   Para añadir metricas do prometheus:
+
+   	1)Vamos a 'add your first data source' e pinchamos 'Prometheus'
+
+    	2)Añadimos na pestaña 'Connection' http://127.0.0.1:9090 e abaixo pinchamos 'save and test'
+
+     	3)No cuadro onde pon 'No data' si estamos encima vamos aos tres puntos da dereita e exportamos
+
+      	4)En metrics eleximos unha metrica de prometheus e runeamos
+
+		
+   
+   • Importe vía grafana el dashboard 1860.
+   
+   • En los ataques de los apartados m y n busque posibles alteraciones en las métricas visualizadas.**
    
 
 
@@ -652,9 +707,9 @@ Anotacións sobre ese enlace:
 4º) Comprobamos o seu funcionamento igual que como en modsecurity, solo que probamos SOLO o ataque slowhttp, xa que temos a hipótesis de que os ataques slowloris non o soporta, por eso necesitamos un mod_antiloris para que se cumpla esa redundancia (si por unha casualidad non funciona modsecurity, o modEvasive pararía os slowhttp e o mod_antiloris pararía os slowloris)
 
 
-### MOD_ANTILORIS
+### MOD_QOS
 
-	
+[Enlace](https://www.howtoforge.com/how-to-defend-slowloris-ddos-with-mod_qos-apache2-on-debian-lenny])para ver instalación
 
 	
    
