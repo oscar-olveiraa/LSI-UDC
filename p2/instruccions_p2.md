@@ -136,7 +136,7 @@
 	
         O atacante fai ettercap -T -q -i ens33 -P remote_browser -M arp:remote //ipcompa/ //10.11.48.1/
 	
- 	    A víctima fai lynx http://www.google.es . En este momento o atacante ve o que esta buscando a victima a tempo real
+ 	    A víctima fai lynx http://www.google.es . En este momento o atacante ve o que esta buscando a victima en tempo real
             (mirar na configuracion de ettercap (/etc/ettercap/etter.conf) si hai que cambiar o browser por defecto, a nos
             funcionounos sin cambiar a configuracion) 
 
@@ -754,6 +754,8 @@ Anotacións sobre ese enlace:
       	udc.es has address 193.144.53.84
 	        udc.es has IPv6 address 2001:720:121c:e000::203
 	        udc.es mail is handled by 10 udc-es.mail.protection.outlook.com.
+
+    Pregunta defensa: sacar ipv6 do gateway -> ip -6 route show default (mirar)
 
    • Obtenga información sobre el direccionamiento de los servidores DNS y MX de la Universidade da Coruña.
 
