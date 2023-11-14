@@ -132,6 +132,13 @@
 
         Vamos a 'Estadísticas' > Puntos finales
 
+  * **Pregunta defensa: ver o navegador do compañeiro a tempo real**
+	
+        O atacante fai ettercap -T -q -i ens33 -P remote_browser -M arp:remote //ipcompa/ //10.11.48.1/
+	
+ 	    A víctima fai lynx http://www.google.es . En este momento o atacante ve o que esta buscando a victima a tempo real
+            (mirar na configuracion de ettercap (/etc/ettercap/etter.conf) si hai que cambiar o browser por defecto, a nos
+            funcionounos sin cambiar a configuracion) 
 
 ### **3.-Obtenga la relación de las direcciones MAC de los equipos de su segmento.**
 
@@ -493,6 +500,8 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
 
 > IMPORTANTE: ter a hora ben posta, si a temos mal non funciona xa que fai calculos a tempo real
 
+> Poñer tamén na configuracion de prometheus.yml o servidor do compañeiro (un target ca sua ip) 
+
 • **Instale prometheus y node_exporter y configúrelos para recopilar todo tipo de métricas de su máquina linux.**
 
    [Enlace](https://prometheus.io/download/) para instalar prometheus.
@@ -537,7 +546,7 @@ Para facer un MITM en IPV6 vamos a facelo a través de ndp (Neighbor Discovery P
      4)En metrics eleximos unha metrica de prometheus e runeamos
 
 
-• Importe vía grafana el dashboard 1860.
+• Importe vía grafana el dashboard 1860. (para defensa -> mirar tamen o dashboard 159)
 
     1)No buscador de arriba da pantalla principar poñemos 'import dashboard'
 
@@ -599,6 +608,10 @@ responderán unha barbarid de veces á máquina víctima). Por exemplo un ataqu
 ### **15.-Instale y configure modsecurity. Vuelva a proceder con el ataque del apartado anterior. ¿Qué acontece ahora?**
 
 > IMPORTANTE: A nos este ano mandaronnos instalar ModSecurity, ModEvasive e Mod_antiloris para crear redundancia
+
+> Podemos mirar os mods que temos activados co comando `apache2ctl -M`
+
+> Coidado cando fagamos o apartado de OSSEC xa que si temos ao compañeiro baneado e me ataca, o servidor non se tumba xa que temos a ip do compañeiro no FW
 
 ### MODSECURITY
 
@@ -746,16 +759,17 @@ Anotacións sobre ese enlace:
 
    	1º)Instalamos dnsutils -> apt install dnsutils
 
-    2º)Para servidores DNS -> dig [+short] DNS udc.es
-       Para servidores MX(correos) -> dig [+short] MX udc.es
+    2º)Para servidores DNS -> dig NS udc.es
+       Para servidores MX(correos) -> dig MX udc.es
        Consulta os servidores configurados en /etc/resolv.conf
-       [+short] : para reducir a información que se saca por pantalla
+      
 
    • ¿Puede hacer una transferencia de zona sobre los servidores DNS de la UDC?. En caso negativo, obtenga todos los nombres.dominio posibles de la UDC.
 
    	Unha transeferencia de zona sobre servidores DNS é un proceso no que un servidor DNS obtén unha copia completa 
     da base de datos de zona de outro servidor DNS polo que non se pode facer xa que están configurados para eso. 
 	Solamente xente autorizada.
+ 	Comando para facer a transferencia -> dig axfr @nombre_servidor_dns dominio.com 
 
   	Para obter os dominios -> nmap -sL 193.144.53.84/20 | grep udc.es
   
