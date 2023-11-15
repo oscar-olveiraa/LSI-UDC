@@ -211,7 +211,7 @@
 
  2º) Creamos un archivo .filter -> `nano mal.filter`
  
-     Indica que se trata de un archivo que contiene reglas o instrucciones para filtrar o procesar datos de acuerdo con ciertos criterios.
+     Indica que se trata de un archivo que contin reglas ou instruccións para filtrar ou procesar datos de acordo con certos criterios.
 
      href son os enlaces que che redirigen a outras paginas desde esa mesma páxina. Si envenenando o trafico de unha persona, calquera cousa que faga que cambie 
      de estado a páxina (pinchando en unha imagen, volvendo para atras, e nun botón desa páxina),x descargase ese payload.
@@ -301,7 +301,7 @@
     sacanos os seus directorios en /home/lsi) 
     Para salir do shell da victima poñemos exit e para salir de metasploit tamen poñemos exit
     Resumen:
-    [use multi/handler] -> Este comando configura e activa un manexador (handler) multipropósito. Ecoita e responde a conexións 
+    [use multi/handler] -> Este comando configura e activa un manexador (handler) multipropósito. Escoita e responde a conexións 
     entrantes que se orixinan a través de exploits ou payloads de Metasploit
 
     [set payload linux/x86/shell/reverse_tcp] -> configura o tipo de payload que se excutará en exploit 
@@ -587,8 +587,8 @@ responderán unha barbarid de veces á máquina víctima). Por exemplo un ataqu
 	   Flags que lle añadín ao ataque(podense añadir ou eliminar máis flags, mirar para mais info en https://linux.die.net/man/1/slowhttptest):
 	   [-c] -> significa o numero de conexions que se lle manda.
 	   [-H] -> pon a slowhttp en modo slowloris.
- 	   [-g] -> generar archivos CSV y HTML (para ver os resultados do ataque slowhttp, podese quitar. Si podense eliminar estos archivos).
-  	   [-o] -> indica o nombre dos .csv e .html que generamos antes.
+ 	   [-g] -> generar archivos CSV e HTML (para ver os resultados do ataque slowhttp, podese quitar. Si podense eliminar estos archivos).
+  	   [-o] -> indica o nombe dos .csv e .html que xeneramos antes.
    	   [-i] -> especifica o intervalo entre os datos de seguimento para probas lentas.
        [-r] -> especifica a velocidade de conexión.
        [-u] -> especifica a url á que se lle vai facer o ataque.
@@ -812,7 +812,7 @@ Temos que facer  os ataques de medusa no directorio onde temos o diccionario.
 	[-h] -> especificar a dirección IP
  	[-u] -> especificar o nombre da máquina
 	[-P] -> para pasar o archivo onde temos as contraseñas
-	[-M] ->  modulo que vamos emplear (sin a extension .mod)
+	[-M] -> modulo que vamos emplear (sin a extension .mod)
  	[-f] -> parase ao encontrar a contraseña
   	[-O] -> Crea un log
 	
