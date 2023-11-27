@@ -27,18 +27,18 @@ Comando a ejecutaar para usar el algoritmo por ssh:
 Creamos as claves publicas e privadas(como usuario lsi, como root no xa que nos entramos as nosas maquinas como usuarios):
     ssh-keygen -t rsa
 O noso compañeiro:
-    1)Copiamos a clave publica do compa en unha carpeta que creamos previamente
+    1)Copia a clave publica nosa en unha carpeta que creamos previamente (keys)
           scp lsi@10.11.48.50:/home/lsi/.ssh/*.pub ../keys
-    2)cremos unha carpeta en .ssh e pegamos en esa carpeta a clave publica do compañeiro
-          [creacion da carpeta] touch authorized_keys
-          [copiamos a clave publica en esa carpeta]cat ../keys/id_rsa.pub >> authorized_keys
+    2)cremos un archivo en .ssh e pegamos ahí a clave publica que copiamos na carpeta key
+          [creacion do archivo] touch authorized_keys
+          [copiamos a clave publica en ese archivo]cat ../keys/id_rsa.pub >> authorized_keys
 
 Unha vez que temos a clave publica do compa solo podemos entrar con ssh lsi@x.x.x.x desde usuario xa que as claves publicas creamolas desde usuario
 
    
-  ----------------------------------------------- D -----------------------------------------------------------
+----------------------------------------------- D -----------------------------------------------------------
 
-Para crear un tuner y verificar que funciona:
+Para crear un tunel y verificar que funciona:
     MAQUINA QUE CREA EL TUNEL:
           ssh -L 9090:localhost:8080 lsi@10.11.48.135 -N  
           echo "Hola desde mi máquina local" | nc -q 0 localhost 9090
