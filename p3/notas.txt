@@ -10,8 +10,11 @@
     SI NO SALEEL NEW FINGERPRINT ESTÁ BIEN
 
   ----------------------------------------------- B -----------------------------------------------------------
-    scp -c [algoritmo_de_cifrado] [archivo_local] [usuario_remoto]@[host_remoto]:[ruta_destino_remota]
-    scp -c aes256-ctr archivo.txt lsi@10.11.48.135:/home/lsi/
+    Para ver los algoritmos disponibles para esto en nuestra máquina:
+        ssh -Q cipher
+    Comando a ejecutaar para usar el algoritmo por ssh:
+        scp -c [algoritmo_de_cifrado] [archivo_local] [usuario_remoto]@[host_remoto]:[ruta_destino_remota]
+        scp -c aes256-ctr archivo.txt lsi@10.11.48.135:/home/lsi/
   ----------------------------------------------- C -----------------------------------------------------------
   ----------------------------------------------- D -----------------------------------------------------------
   ----------------------------------------------- E -----------------------------------------------------------
