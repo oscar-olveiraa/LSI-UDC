@@ -33,6 +33,16 @@
 
    
   ----------------------------------------------- D -----------------------------------------------------------
+
+    Para crear un tuner y verificar que funciona:
+        MAQUINA QUE CREA EL TUNEL:
+          ssh -L 9090:localhost:8080 lsi@10.11.48.135 -N  
+          echo "Hola desde mi máquina local" | nc -q 0 localhost 9090
+        MAQUINA RECEPTORA:
+          nc -l -p 8080
+
+    Para securizar servicio apache por tunel ssh:
+  
   ----------------------------------------------- E -----------------------------------------------------------
 2)
 
