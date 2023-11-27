@@ -1,6 +1,9 @@
 1)
   ----------------------------------------------- A -----------------------------------------------------------
 
+    Para ver información de como se establece la conexioón por ssh usar el parámetro -v
+        ssh 10.11.48.135 -v
+  
     Creamos el archivo ssh_known_hosts y metemos en él el output del ssh-keyscan a la IP de nuestro compañero:
         touch /etc/ssh/ssh_known_hosts
         ssh-keyscan 10.11.48.118 >> /etc/ssh/ssh_known_hosts 
@@ -10,11 +13,13 @@
     SI NO SALEEL NEW FINGERPRINT ESTÁ BIEN
 
   ----------------------------------------------- B -----------------------------------------------------------
+
     Para ver los algoritmos disponibles para esto en nuestra máquina:
         ssh -Q cipher
     Comando a ejecutaar para usar el algoritmo por ssh:
         scp -c [algoritmo_de_cifrado] [archivo_local] [usuario_remoto]@[host_remoto]:[ruta_destino_remota]
         scp -c aes256-ctr archivo.txt lsi@10.11.48.135:/home/lsi/
+
   ----------------------------------------------- C -----------------------------------------------------------
   ----------------------------------------------- D -----------------------------------------------------------
   ----------------------------------------------- E -----------------------------------------------------------
