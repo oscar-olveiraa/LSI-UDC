@@ -44,6 +44,7 @@ Para crear un tunel y verificar que funciona:
           echo "Hola desde mi máquina local" | nc -q 0 localhost 9090
     MAQUINA RECEPTORA:
           nc -l -p 8080
+          # Hola desde mi máquina local
 
 Para securizar servicio apache por tunel ssh:
   
