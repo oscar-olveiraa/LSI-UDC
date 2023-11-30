@@ -5,28 +5,28 @@
 > Para ver archivos ocultos de un directorio -> `ls -la`
 
 
-  A. Abra un shell remoto sobre SSH y analice el proceso que se realiza. Configure su fichero ssh_known_hosts para dar soporte a la clave pública del servidor.
+  A) Abra un shell remoto sobre SSH y analice el proceso que se realiza. Configure su fichero ssh_known_hosts para dar soporte a la clave pública del servidor.
 
 
-   **-Analisis do proceso de conexion en ssh:**
+   * **Analisis do proceso de conexion en ssh:**
   
-   Para ver o proceso que se fai durante a conexion ssh -> `ssh -v lsi@x.x.x.x` 
+      Para ver o proceso que se fai durante a conexion ssh -> `ssh -v lsi@x.x.x.x` 
    
-   Podese poñer `ssh  lsi@x.x.x.x -v` e ademais podemos aumentar a informacion do proceso aumentando o nuemro de 'v', p.e `ssh -vvv lsi@x.x.x.x`)
+      Podese poñer `ssh  lsi@x.x.x.x -v` e ademais podemos aumentar a informacion do proceso aumentando o nuemro de 'v', p.e `ssh -vvv lsi@x.x.x.x`)
    
-   **-Configuración archivo *ssh_known_hosts*:**
+   * **-Configuración archivo *ssh_known_hosts*:**
 
-   1)Creamos o archivo *ssh_known_hosts* -> `touch /etc/ssh/ssh_known_hosts`
+     1)Creamos o archivo *ssh_known_hosts* -> `touch /etc/ssh/ssh_known_hosts`
 
-   2)Añadimos a salida do comando `ssh-keyscan` a ese archivo (ssh-keyscan é un comando para recopilar as claves públicas dos servidores SSH) -> `ssh-keyscan 10.11.49.118 >> /etc/ssh/ssh_known_hosts`
+     2)Añadimos a salida do comando `ssh-keyscan` a ese archivo (ssh-keyscan é un comando para recopilar as claves públicas dos servidores SSH) -> `ssh-keyscan 10.11.49.118 >> /etc/ssh/ssh_known_hosts`
 
-   3)Vaciamos o contido do archivo `known_hosts` do *.ssh* (archivo oculto de /home/lsi) -> `echo "" > /home/lsi/.ssh/known_hosts`
+     3)Vaciamos o contido do archivo `known_hosts` do *.ssh* (archivo oculto de /home/lsi) -> `echo "" > /home/lsi/.ssh/known_hosts`
 
-   Unha vez que seguimos os anteriores pasos, si facemos `ssh lsi@maquina_compi` non debería saltar a advertencia de fingerprinting (ocurre cando SSH non recoñece a clave pública do servidor ao que nos estamos conectando)
+     Unha vez que seguimos os anteriores pasos, si facemos `ssh lsi@maquina_compi` non debería saltar a advertencia de fingerprinting (ocurre cando SSH non recoñece a clave pública do servidor ao que nos estamos conectando)
 
 #
  
-  B. Haga una copia remota de un fichero utilizando un algoritmo de cifrado determinado. Analice el proceso que se realiza.
+  B) Haga una copia remota de un fichero utilizando un algoritmo de cifrado determinado. Analice el proceso que se realiza.
 
   > Cipher é un algortimo de cifrado simétrico e asimétricos que se utilizan para establecer unha conexión segura entre hosts
 
@@ -45,21 +45,21 @@
 
 #
   
-  C. Configure su cliente y servidor para permitir conexiones basadas en un esquema de autenticación de usuario de clave pública.
+  C) Configure su cliente y servidor para permitir conexiones basadas en un esquema de autenticación de usuario de clave pública.
 
   
 
 #
   
-  D. Mediante túneles SSH securice algún servicio no seguro.
+  D) Mediante túneles SSH securice algún servicio no seguro.
 
 #
   
-  E. “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
+  E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
 
 #
 
-  F. PARA PLANTEAR DE FORMA TEÓRICA.: Securice su sevidor considerando que únicamente dará servicio ssh para sesiones de usuario desde determinadas IPs.
+  F) PARA PLANTEAR DE FORMA TEÓRICA.: Securice su sevidor considerando que únicamente dará servicio ssh para sesiones de usuario desde determinadas IPs.
 
 
 
