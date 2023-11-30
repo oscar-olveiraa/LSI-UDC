@@ -28,11 +28,26 @@
  
   B. Haga una copia remota de un fichero utilizando un algoritmo de cifrado determinado. Analice el proceso que se realiza.
 
-  
+  > Cipher é un algortimo de cifrado simétrico e asimétricos que se utilizan para establecer unha conexión segura entre hosts
+
+  Para ver os algoritmos de cifrado dispoñibles na máquina -> `ssh -Q cipher`
+
+  Para ver a lista dos algoritmos que se aplican por defecto, facendo `ssh -vv lsi@x.x.x.x` veremos estas dúas lineas indicando os algoritmos por defecto:
+
+      debug2:ciphers ctos: chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com
+      debug2: ciphers stoc: chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com
+
+      ---------
+      ciphers ctos -> algoritmos cifrados que o cliente (ctos) está disposto a utilizar durante a negociación da conexión SSH
+      ciphers stoc -> algoritmos cifrados que o servidor (stoc) acepta durante a negociación.
+
+  Copia remot con un algoritmo cifrado -> `scp -c aes256-ctr archivo.txt lsi@10.11.48.118:/home/lsi/`  
 
 #
   
   C. Configure su cliente y servidor para permitir conexiones basadas en un esquema de autenticación de usuario de clave pública.
+
+  
 
 #
   
