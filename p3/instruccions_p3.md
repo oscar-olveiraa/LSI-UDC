@@ -1,5 +1,7 @@
 # **Práctica 3 Legislación e Seguridad Informática**
 
+> Este ano mandaronnos facer os exercicios 1,2,3,6,7.
+
 ### **1.-Tomando como base de trabajo el SSH pruebe sus diversas utilidades:**
 
 > Para ver archivos ocultos de un directorio -> `ls -la`
@@ -49,25 +51,41 @@ C) Configure su cliente y servidor para permitir conexiones basadas en un esquem
 
   > IMPORTANTE:
   >
-  > -CREAR AL CLAVES COMO USUARIO LSI XA QUE INICIAMOS CONEXIÓN COMO USUARIO, NON COMO ROOT
+  > -CREAR AL CLAVES COMO USUARIO LSI XA QUE INICIAMOS CONEXIÓN COMO USUARIO, NON COMO ROOT.
   >
-  > -A CLAVE PRIVADA NON SE LLE DA NADIE, SOLO A PODEMOS TER NÓS, O ÚNICO QUE SE DAN SON CLAVES PÚBLICAS
+  > -A CLAVE PRIVADA NON SE LLE DA NADIE, SOLO A PODEMOS TER NÓS, O ÚNICO QUE SE DAN SON CLAVES PÚBLICAS.
+  >
+
 
   Para crear as claves -> lsi@debian:~$ `ssh-keygen -t rsa`
 
-  Metemos a nosa clave púbica
+  O noso compañeiro mete a nosa clave pública na súa máquina para así cando fagamos un ssh á súa máquina non nos pida a súa contraseña (basicamente a clave pública é como si fora o candado e a clave privada é como si fora a chave, si temos o candado en esa máquina, como nos temos a chave podemos entrar): 
 
-  
+  1)Creamos unha carpeta en */home/lsi* para gardar temporalmete esa clave -> `mkdir clave`
 
-  
+  2)O noso compañeiro copia esa chave na carpeta temporal desde */home/lsi/.ssh*-> `scp lsi@10.11.48.135:/home/lsi/.ssh/*.pub ../clave`
+
+  3)Creamos un archivo en */home/lsi/.ssh*-> `touch authorized_keys`
+
+  4)Sobrescribimos ese archivo desde */home/lsi/.ssh* ca clave pública que esta na carpeta temporal -> `cat ../clave/id_rsa.pub >> authorized_keys`
+
+  Comprobamos o funcionamento facendo un `ssh lsi@ip_compa` e mirar que non nos pida a súa contraseña.
 
 #
   
-  D) Mediante túneles SSH securice algún servicio no seguro.
+D) Mediante túneles SSH securice algún servicio no seguro.
+
+  Para crear o tunel ssh -> `ssh -L 9090:localhost:8080 lsi@10.11.48.118 -N`
+
+  Comprobación (o 'cliente' ten que estar escoitando mentres o servidor lle manda mensaxes):
+
+  Quen estableza o tunel -> `echo "Hola desde mi máquina local" | nc -q 0 localhost 9090` (mirar o do -q)
+
+  Quen estea como 'cliente', recibirá ese mensaxe cando estea escoitando -> `nc -l -p 8080`
 
 #
   
-  E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
+E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
 
 #
 
@@ -89,24 +107,12 @@ C) Configure su cliente y servidor para permitir conexiones basadas en un esquem
 ### **3.-Tomando como base de trabajo el openVPN deberá configurar una VPN entre dos equipos virtuales del laboratorio que garanticen la confidencialidad entre sus comunicaciones.**
 
 
-
-### **4.-EN LA PRÁCTICA 1 se configuró una infraestructura con servidores y clientes NTP. Modifique la configuración para autenticar los equipos involucrados.**
-
-
-
-### **5.-EN LA PRÁCTICA 1 se instalaron servidores y clientes de log. Configure un esquema que permita cifrar las comunicaciones.**
-
-
-
 ### **6.-En este punto, cada máquina virtual será servidor y cliente de diversos servicios (NTP, syslog, ssh, web, etc.). Configure un “firewall stateful” de máquina adecuado a la situación actual de su máquina.**
 
 
 
 ### **7.-Ejecute la utilidad de auditoría de seguridad lynis en su sistema y trate de identificar las acciones de securización detectadas así como los consejos sobre las que se deberían contemplar.**
 
-
-
-### **8.-**
 
 
 
