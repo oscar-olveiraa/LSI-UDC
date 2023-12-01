@@ -5,7 +5,7 @@
 > Para ver archivos ocultos de un directorio -> `ls -la`
 
 
-  A) Abra un shell remoto sobre SSH y analice el proceso que se realiza. Configure su fichero ssh_known_hosts para dar soporte a la clave pública del servidor.
+A) Abra un shell remoto sobre SSH y analice el proceso que se realiza. Configure su fichero ssh_known_hosts para dar soporte a la clave pública del servidor.
 
 
    * **Analisis do proceso de conexion en ssh:**
@@ -26,7 +26,7 @@
 
 #
  
-  B) Haga una copia remota de un fichero utilizando un algoritmo de cifrado determinado. Analice el proceso que se realiza.
+B) Haga una copia remota de un fichero utilizando un algoritmo de cifrado determinado. Analice el proceso que se realiza.
 
   > Cipher é un algortimo de cifrado simétrico e asimétricos que se utilizan para establecer unha conexión segura entre hosts
 
@@ -45,7 +45,19 @@
 
 #
   
-  C) Configure su cliente y servidor para permitir conexiones basadas en un esquema de autenticación de usuario de clave pública.
+C) Configure su cliente y servidor para permitir conexiones basadas en un esquema de autenticación de usuario de clave pública.
+
+  > IMPORTANTE:
+  >
+  > -CREAR AL CLAVES COMO USUARIO LSI XA QUE INICIAMOS CONEXIÓN COMO USUARIO, NON COMO ROOT
+  >
+  > -A CLAVE PRIVADA NON SE LLE DA NADIE, SOLO A PODEMOS TER NÓS, O ÚNICO QUE SE DAN SON CLAVES PÚBLICAS
+
+  Para crear as claves -> lsi@debian:~$ `ssh-keygen -t rsa`
+
+  Metemos a nosa clave púbica
+
+  
 
   
 
