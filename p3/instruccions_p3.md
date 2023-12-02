@@ -43,7 +43,7 @@ B) Haga una copia remota de un fichero utilizando un algoritmo de cifrado determ
       ciphers ctos -> algoritmos cifrados que o cliente (ctos) está disposto a utilizar durante a negociación da conexión SSH
       ciphers stoc -> algoritmos cifrados que o servidor (stoc) acepta durante a negociación.
 
-  Copia remot con un algoritmo cifrado -> `scp -c aes256-ctr archivo.txt lsi@10.11.48.118:/home/lsi/`  
+  Copia remota con un algoritmo cifrado -> `scp -c aes256-ctr archivo.txt lsi@10.11.48.118:/home/lsi/`  
 
 #
   
