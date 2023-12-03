@@ -605,7 +605,7 @@ IP->10.11.48.135
 
          *.* action(
          type="omfwd" 
-         target="10.11.48.50" 
+         target="10.11.48.118" 
          port="514" 
          protocol="tcp" 
          action.resumeRetryCount="-1"
