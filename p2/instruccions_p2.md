@@ -737,7 +737,7 @@ Anotacións sobre ese enlace:
 
 ### MOD_QOS
 
-[Enlace](https://www.howtoforge.com/how-to-defend-slowloris-ddos-with-mod_qos-apache2-on-debian-lenny])para ver instalación
+[Enlace](https://www.howtoforge.com/how-to-defend-slowloris-ddos-with-mod_qos-apache2-on-debian-lenny)para ver instalación
 
 	
    
