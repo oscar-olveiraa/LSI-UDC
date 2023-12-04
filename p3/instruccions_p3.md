@@ -124,16 +124,16 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
    5) En /etc/openvpn creamos un archivo 'tunel.conf' e añadimos as seguintes lineas:
 
-           local 10.11.48.118
-           remote 10.11.48.135
-           dev tun1
-           port 6969
-           comp-lzo
-           user nobody
-           ping 15
-           ifconfig 172.110.0.1 172.110.0.2 #indica ifconfig ip-origen ip-destino
-           secret /etc/openvpn/vpn.key
-           cipher AES-256-CBC
+          local 10.11.48.118
+          remote 10.11.48.135
+          dev tun1
+          port 6969
+          comp-lzo
+          user nobody
+          ping 15
+          ifconfig 172.110.0.1 172.110.0.2 #indica ifconfig ip-origen ip-destino
+          secret /etc/openvpn/vpn.key
+          cipher AES-256-CBC
    6) Iniciamos o VPN (ten que estar o cliente tamén configurado e ca vpn iniciada para que se estableza a conexión). Comando para inicialo -> `openvpn --config /etc/openvpn/tunel.conf`
 
 
@@ -147,25 +147,25 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
   4) Creamos tamén o archivo 'tune.conf' en */etc/openvpn* e configuramos da mesma maneira solo que cas ips ao revés que o servidor:
 
-          local 10.11.48.135
-          remote 10.11.48.118
-          dev tun1
-          port 6969
-          comp-lzo
-          user nobody
-          ping 15
-          ifconfig 172.110.0.2 172.110.0.1
-          secret /etc/openvpn/vpn.key
-          cipher AES-256-CBC
+         local 10.11.48.135
+         remote 10.11.48.118
+         dev tun1
+         port 6969
+         comp-lzo
+         user nobody
+         ping 15
+         ifconfig 172.110.0.2 172.110.0.1
+         secret /etc/openvpn/vpn.key
+         cipher AES-256-CBC
 
   5) Iniciamos o VPN -> `openvpn --config /etc/openvpn/tunel.conf`
 
-### Conexión por ssh ca ip do vpn
+### Conexión por SSH ca IP do VPN
 
   Podemos entrar por ssh á máquina do compañeiro ca súa ip do vpn. Para poder facer eso metemos a súa ip nos wrappers. Exemplo cos wrappers do cliente:
 
-       #loopback e compañeiro
-        sshd: 127.0.0.1, 10.11.48.118, 10.11.50.118, 172.110.0.1: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/lsi/allows/logssh
+    #loopback e compañeiro
+    sshd: 127.0.0.1, 10.11.48.118, 10.11.50.118, 172.110.0.1: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/lsi/allows/logssh
 
   Comprobamos tendo en un terminal o VPN correndo e en outro establecer conexión por ssh -> `ssh lsi@172.110.0.1`
 
