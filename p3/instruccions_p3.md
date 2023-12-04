@@ -170,9 +170,55 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
   Comprobamos tendo en un terminal o VPN correndo e en outro establecer conexión por ssh -> `ssh lsi@172.110.0.1`
 
       
-
-
 ### **6.-En este punto, cada máquina virtual será servidor y cliente de diversos servicios (NTP, syslog, ssh, web, etc.). Configure un “firewall stateful” de máquina adecuado a la situación actual de su máquina.**
+
+> Acordarse de borrar na máquina todos os comentarios que estean nos seguintes scripts.
+
+  Creamos un cron(servizo que permite a execución programada de tareas, comandos, scripts de forma automática) para que cada 10 minutos se resetee o firewall. Con esto si pasa algo co firewall e non temos acceso á máquina, reseteanse as reglas e volveríamos a poder entrar.
+
+  1) Creamos o script que resetee as reglas de iptables(vamos a gardar en un log os restarts que se van facendo, acordarse de vacialo cada x tempo xa que pode chegar a ocupar moito):
+
+            #!/bin/bash
+
+            #IPv4
+            iptables -P INPUT ACCEPT       # Permitirá o tráfico de entrada menos que haxa reglas específicas que o bloqueen.
+            iptables -P OUTPUT ACCEPT      # Permitirá o tráfico de saída menos que haxa reglas específicas que o bloqueen.
+            iptables -P FORWARD ACCEPT     # Permite o reenvío por defecto.
+            iptables -F                    # Restablece as reglas a un estado inicial vacío.
+            iptables -X                    # Borra todas as cadenas personalizadas definidas polo usuario na tabla de filtrado.
+            iptables -t nat -F             # Borra todas as reglas da tabla de traducción de direccións de rede (NAT)
+
+            #IPv6
+            ip6tables -P INPUT ACCEPT      
+            ip6tables -P OUTPUT ACCEPT     
+            ip6tables -P FORWARD ACCEPT    
+            ip6tables -F                   
+            ip6tables -X                   
+            ip6tables -t nat -F            
+
+            /bin/echo "$(date): firewall reset" >> /var/log/fw_reset.log
+
+   1) Metemos no cron o script. Abrimos o editor de cron con `crontab -e` e añadimos a seguinte linea ao final:
+
+          */10 * * * * bash /home/lsi/restart_firewall.sh
+
+          -----------------EXPLICACIÓN-----------------
+
+          [*/10]: Este campo indica a frecuencia de execución en minutos. O asterisco significa "calquer valor" (da igual minuto 20 que 50), e /10 significa "cada 10".
+                 Polo tanto, esta parte indica que o cron job se executará cada 10 minutos.
+          [*]: Este campo indica a hora do día. Un asterisco significa "calquer valor" polo que significa calquer hora do día.
+          [*]: Este campo indica o día do mes. Un asterisco significa "calquer valor"polo que significa calquer día do mes.
+          [*]: Este campo indica o mes. Un asterisco significa "calquer valor" polo que significa cualquier mes.
+          [*]: Este campo indica o día da semana. Un asterisco significa "calquer valor" polo que significa calquer día da semana.
+          [bash /home/lsi/reset_firewall.sh]: comando que se executará. Executaremos o script que resetea o firewall (restart_firewall.sh).
+
+
+  O señor firewall:
+
+  
+
+           
+   
 
 
 
