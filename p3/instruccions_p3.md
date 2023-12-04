@@ -113,6 +113,12 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
 ### **7.-Ejecute la utilidad de auditoría de seguridad lynis en su sistema y trate de identificar las acciones de securización detectadas así como los consejos sobre las que se deberían contemplar.**
 
+  1)Instalamos lynis -> `apt install lynis`
+
+  2)Executámolo e esperamos a ver os resultados -> `lynis audit system`
+
+  3)Mirar servicios/puertos/carpetas... que tocamos durante as practicas 1,2,3, entender porque non está ben securizado e saber como solucionar (non fai falta arreglar)
+
 
 
 
