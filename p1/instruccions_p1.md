@@ -634,7 +634,7 @@ IP->10.11.48.135
 
    * En NTP como usa UDP pois unha gran numero de vulnerabilidades. P.e -> falta de autenticación, ataques de inudacion, ataques de DDoS, spoofin de ip
 
-   * En rsyslog usamos TCP xa que é mais fiable pero tamén hai vulnerabilidades xa que abres un novo porto na máquina innecesariamente (porto 80), aínda que contrarrestasmos bastantes problemas con respeto ao UDP
+   * En rsyslog usamos TCP xa que é mais fiable pero tamén hai vulnerabilidades xa que abres un novo porto na máquina innecesariamente (porto 514), aínda que contrarrestasmos bastantes problemas con respeto ao UDP
 
      
 
