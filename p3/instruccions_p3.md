@@ -106,6 +106,71 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
 ### **3.-Tomando como base de trabajo el openVPN deberá configurar una VPN entre dos equipos virtuales del laboratorio que garanticen la confidencialidad entre sus comunicaciones.**
 
+ > Instalamos openVPN -> `apt install openvpn`
+ >
+ > Si ao iniciar o VPN nos sale este error (ERROR: Cannot ioctl TUNSETIFF tun1: Device or resource busy (errno=16)), matamos ao proceso -> `killall openvpn`
+ >
+ > No noso caso 10.11.48.118 fai de server e 10.11.48.135 de cliente. 
+
+   ### - Servidor VPN:
+
+   1) Na carpeta */etc/openvpn/* creamos unha clave -> `openvpn --genkey --secret vpn.key`
+   
+   2) Damoslle os seguintes permisos -> `chmod 640 vpn.key`
+
+   3) Cambiamos de propiedad á clave e pasa a ser de nobody(usuario que ten un nivel moi baixo de privilexios e axuda a reforzar a seguridade limitando o acceso a esos archivos a un usuario con privilexios mínimos) -> `chown nobody vpn.key`
+
+   4) Pasamoslle esa clave ao noso compañeiro -> `scp vpn.key lsi@10.11.48.135:/home/lsi/`
+
+   5) En /etc/openvpn creamos un archivo 'tunel.conf' e añadimos as seguintes lineas:
+
+           local 10.11.48.118
+           remote 10.11.48.135
+           dev tun1
+           port 6969
+           comp-lzo
+           user nobody
+           ping 15
+           ifconfig 172.110.0.1 172.110.0.2 #indica ifconfig ip-origen ip-destino
+           secret /etc/openvpn/vpn.key
+           cipher AES-256-CBC
+   6) Iniciamos o VPN (ten que estar o cliente tamén configurado e ca vpn iniciada para que se estableza a conexión). Comando para inicialo -> `openvpn --config /etc/openvpn/tunel.conf`
+
+
+  ### - Cliente VPN:
+
+  1) Movemos a clave a */etc/openvpn* -> `root@debian:/home/lsi# mv vpn.key /etc/openvpn/`
+
+  2) Damoslle permisos -> `chmod 640 vpn.key`
+
+  3) Cambiamos de propietario a nobody -> `chown nobody vpn.key `
+
+  4) Creamos tamén o archivo 'tune.conf' en */etc/openvpn* e configuramos da mesma maneira solo que cas ips ao revés que o servidor:
+
+          local 10.11.48.135
+          remote 10.11.48.118
+          dev tun1
+          port 6969
+          comp-lzo
+          user nobody
+          ping 15
+          ifconfig 172.110.0.2 172.110.0.1
+          secret /etc/openvpn/vpn.key
+          cipher AES-256-CBC
+
+  5) Iniciamos o VPN -> `openvpn --config /etc/openvpn/tunel.conf`
+
+### Conexión por ssh ca ip do vpn
+
+  Podemos entrar por ssh á máquina do compañeiro ca súa ip do vpn. Para poder facer eso metemos a súa ip nos wrappers. Exemplo cos wrappers do cliente:
+
+       #loopback e compañeiro
+        sshd: 127.0.0.1, 10.11.48.118, 10.11.50.118, 172.110.0.1: spawn echo `/bin/date`\: intento conectar %a con %A [PERMITIDO] >> /home/lsi/allows/logssh
+
+  Comprobamos tendo en un terminal o VPN correndo e en outro establecer conexión por ssh -> `ssh lsi@172.110.0.1`
+
+      
+
 
 ### **6.-En este punto, cada máquina virtual será servidor y cliente de diversos servicios (NTP, syslog, ssh, web, etc.). Configure un “firewall stateful” de máquina adecuado a la situación actual de su máquina.**
 
