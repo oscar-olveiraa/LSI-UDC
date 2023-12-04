@@ -762,7 +762,7 @@ Anotacións sobre ese enlace:
    	1º)Instalamos dnsutils -> apt install dnsutils
 
     2º)Para servidores DNS -> dig NS udc.es
-       Para servidores MX(correos) -> dig MX udc.es
+       Para servidores MX(estafetas de correos) -> dig MX udc.es
        Consulta os servidores configurados en /etc/resolv.conf
       
 
