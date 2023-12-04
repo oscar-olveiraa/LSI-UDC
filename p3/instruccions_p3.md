@@ -185,7 +185,7 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
             iptables -P OUTPUT ACCEPT      # Permitirá o tráfico de saída menos que haxa reglas específicas que o bloqueen.
             iptables -P FORWARD ACCEPT     # Permite o reenvío por defecto.
             iptables -F                    # Restablece as reglas a un estado inicial vacío.
-            iptables -X                    # Borra todas as cadenas personalizadas definidas polo usuario na tabla de filtrado.
+            iptables -X                    # Borra todas as cadenas((agrupacions de reglas)) personalizadas definidas polo usuario na tabla de filtrado.
             iptables -t nat -F             # Borra todas as reglas da tabla de traducción de direccións de rede (NAT)
 
             #IPv6
@@ -215,7 +215,9 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
   O señor firewall:
 
-  
+  Script
+
+  Meter en /etc/network/interfaces o post-up /hpme/lsi/firewall/firewall.sh
 
            
    
