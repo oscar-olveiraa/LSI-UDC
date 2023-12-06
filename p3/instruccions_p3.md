@@ -308,7 +308,7 @@ fusermount -u /mnt/oscar_montura/
 
     
     #--Reglas para NTP como cliente(como server igual)--
-    iptables -A OUTPUT -s $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A INPUT -s $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
 
    
