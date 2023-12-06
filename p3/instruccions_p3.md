@@ -284,7 +284,7 @@ fusermount -u /mnt/oscar_montura/
     iptables -A OUTPUT -d $ipCompa -p ipv6 -j ACCEPT
 
 
-    #--Reglas para poder coenctarte por ssh--
+    #--Reglas para poder conectarte por ssh a ti mismo e ao teu compa--
 
     iptables -A INPUT -s $ipVPN_1,$ipVPN_2,$ipCompa,$ipCompaVPN -p TCP --dport 22 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa,$ipCompaVPN -p TCP --dport 22 -m conntrack --ctstate NEW -j ACCEPT
@@ -293,29 +293,44 @@ fusermount -u /mnt/oscar_montura/
     ip6tables -A OUTPUT -d $ip6Compa -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
 
 
+    #--Regla para permitir acceso aos servidores DNS--
     iptables -A OUTPUT -d $servidorDNS1,$servidorDNS2,$servidorDNS3 -p UDP --dport 53 -m conntrack --ctstate NEW  -j ACCEPT
 
+
+    #--Reglas para rsyslog como cliente(como servidor creo que con poñer solo o input chega)--
     iptables -A INPUT -s $ipCompa -p TCP --dport 514 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
     iptables -A OUTPUT -d $ipCompa -p TCP --dport 514 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 
+    
+    #--Reglas para poder establecer conexión ca VPN privada como cliente(como server igual)--
     iptables -A INPUT -s $ipCompa -p UDP --dport 6969 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
     iptables -A OUTPUT -d $ipCompa -p UDP --dport 6969 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 
+    
+    #--Reglas para NTP como cliente(como server igual)--
     iptables -A OUTPUT -s $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
 
+   
+    #--Reglas para HTTP--
     iptables -A INPUT -s $ipCompa -p TCP --dport 80 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa,$debianRep1,$debianRep2,$debianRep3,$debianRep4,$debianRep5 -p TCP --dport 80 -m conntrack --ctstate NEW -j ACCEPT
 
+    
+    #--Reglas para HTTPS--
     iptables -A INPUT -s $ipCompa -p TCP --dport 443 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa -p TCP --dport 443 -m conntrack --ctstate NEW -j ACCEPT
 
+    
+    #--Reglas para ICMP(p.e para facer ping, ver info da rede...)--
     iptables -A INPUT -s $ipCompa,$ipCompaVPN,$ipLocalhost -p ICMP -m conntrack --ctstate NEW -j ACCEPT
     iptables -A OUTPUT -d $ipCompa,$ipCompaVPN,$ipLocalhost -p ICMP -m conntrack --ctstate NEW -j ACCEPT
 
     ip6tables -A INPUT -s $ip6Compa,$ip6Localhost -p icmpv6 -m conntrack --ctstate NEW -j ACCEPT
     ip6tables -A OUTPUT -d $ip6Compa,$ip6Localhost -p icmpv6 -m conntrack --ctstate NEW -j ACCEPT
 
+    
+    #--Reglas para rechazar o tráfico entrante(UDP,TCP,ICMP)--
     iptables -A INPUT -p UDP -j REJECT --reject-with icmp-port-unreachable
     iptables -A INPUT -p TCP -j REJECT --reject-with tcp-reset
     iptables -A INPUT -p ICMP -j REJECT --reject-with icmp-port-unreachable
