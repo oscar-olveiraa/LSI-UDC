@@ -75,7 +75,7 @@ C) Configure su cliente y servidor para permitir conexiones basadas en un esquem
   
 D) Mediante túneles SSH securice algún servicio no seguro.
 
-  Para crear o tunel ssh -> `ssh -L 9090:localhost:8080 lsi@10.11.48.118 -N`
+  Para crear o tunel ssh -> `ssh -L 9090:localhost:80 lsi@10.11.48.118 -N`
 
   Comprobación (o 'cliente' ten que estar escoitando mentres o servidor lle manda mensaxes):
 
@@ -83,11 +83,15 @@ D) Mediante túneles SSH securice algún servicio no seguro.
 
   Quen estea como 'cliente', recibirá ese mensaxe cando estea escoitando -> `nc -l -p 8080`
 
+  2º comprobación:
+
+  Si o servidor fai `lynx http://127.0.0.1:9090` debería estar no apache do compañeiro
+
 #
   
 E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
 
-Montar el directorio remoto (en este caso /tmp/cositas) en un directorio local (/mnt/oscar_montura/)
+Montar o directorio remoto (en este caso /tmp/cositas) en un directorio local (/mnt/oscar_montura/)
 ```
 sshfs lsi@10.11.48.135:/tmp/cositas /mnt/oscar_montura/ -o follow_symlinks
 ```
