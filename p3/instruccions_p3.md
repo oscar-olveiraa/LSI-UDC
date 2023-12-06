@@ -87,7 +87,14 @@ D) Mediante túneles SSH securice algún servicio no seguro.
   
 E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
 
-#
+Montar el directorio remoto (en este caso /tmp/cositas) en un directorio local (/mnt/oscar_montura/)
+```
+sshfs lsi@10.11.48.135:/tmp/cositas /mnt/oscar_montura/ -o follow_symlinks
+```
+Desmontar montura:
+```
+fusermount -u /mnt/oscar_montura/
+```
 
   F) PARA PLANTEAR DE FORMA TEÓRICA.: Securice su sevidor considerando que únicamente dará servicio ssh para sesiones de usuario desde determinadas IPs.
 
