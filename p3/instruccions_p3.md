@@ -215,15 +215,106 @@ E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel 
 
   O señor firewall:
 
-  Script
+    #!/bin/sh
 
-  Meter en /etc/network/interfaces o post-up /hpme/lsi/firewall/firewall.sh
+    ipCompa=10.11.48.118
+    ip6Compa=2002:a0b:3076::1
+    ipCompaVPN=172.110.0.1
+    ipVPN_1=10.20.32.0/21
+    ipVPN_2=10.30.8.0/21
+    servidorDNS1=10.8.12.49
+    servidorDNS2=10.8.12.50
+    servidorDNS3=10.8.12.47
+    debianRep1=151.101.194.132
+    debianRep2=151.101.130.132
+    debianRep3=151.101.66.132
+    debianRep4=151.101.2.132
+    debianRep5=151.101.134.132
+    ipLocalhost=127.0.0.1
+    ip6Localhost=::1
+
+    iptables -F
+    iptables -X
+    iptables -t nat -F
+
+
+    #--Politicas por defecto--
+    
+    iptables -P INPUT DROP
+    iptables -P OUTPUT DROP
+    iptables -P FORWARD DROP
+
+    ip6tables -P INPUT DROP
+    ip6tables -P OUTPUT DROP
+    ip6tables -P FORWARD DROP
+
+
+    #--Reglas para un firewall control de estado. Permiten o tráfico que está asociado con conexións xa establecidas--
+     
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+    ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    ip6tables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+
+    #--Reglas para permitir tráfico de loopback--
+   
+    iptables -A INPUT -i lo -j ACCEPT
+    iptables -A OUTPUT -o lo -j ACCEPT
+
+    ip6tables -A INPUT -i lo -j ACCEPT
+    ip6tables -A OUTPUT -o lo -j ACCEPT
+
+
+    #--Reglas para permitir o tráfico IPv6 desde ou hacia dirección ip do compa--
+
+    iptables -A INPUT -s $ipCompa -p ipv6 -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa -p ipv6 -j ACCEPT
+
+
+    #--Reglas para poder coenctarte por ssh--
+
+    iptables -A INPUT -s $ipVPN_1,$ipVPN_2,$ipCompa,$ipCompaVPN -p TCP --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa,$ipCompaVPN -p TCP --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+
+    ip6tables -A INPUT -s $ip6Compa -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+    ip6tables -A OUTPUT -d $ip6Compa -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+
+
+    iptables -A OUTPUT -d $servidorDNS1,$servidorDNS2,$servidorDNS3 -p UDP --dport 53 -m conntrack --ctstate NEW  -j ACCEPT
+
+    iptables -A INPUT -s $ipCompa -p TCP --dport 514 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa -p TCP --dport 514 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+
+    iptables -A INPUT -s $ipCompa -p UDP --dport 6969 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa -p UDP --dport 6969 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+
+    iptables -A OUTPUT -s $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa,$ipLocalhost -p UDP --dport 123 -m conntrack --ctstate NEW -j ACCEPT
+
+    iptables -A INPUT -s $ipCompa -p TCP --dport 80 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa,$debianRep1,$debianRep2,$debianRep3,$debianRep4,$debianRep5 -p TCP --dport 80 -m conntrack --ctstate NEW -j ACCEPT
+
+    iptables -A INPUT -s $ipCompa -p TCP --dport 443 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa -p TCP --dport 443 -m conntrack --ctstate NEW -j ACCEPT
+
+    iptables -A INPUT -s $ipCompa,$ipCompaVPN,$ipLocalhost -p ICMP -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A OUTPUT -d $ipCompa,$ipCompaVPN,$ipLocalhost -p ICMP -m conntrack --ctstate NEW -j ACCEPT
+
+    ip6tables -A INPUT -s $ip6Compa,$ip6Localhost -p icmpv6 -m conntrack --ctstate NEW -j ACCEPT
+    ip6tables -A OUTPUT -d $ip6Compa,$ip6Localhost -p icmpv6 -m conntrack --ctstate NEW -j ACCEPT
+
+    iptables -A INPUT -p UDP -j REJECT --reject-with icmp-port-unreachable
+    iptables -A INPUT -p TCP -j REJECT --reject-with tcp-reset
+    iptables -A INPUT -p ICMP -j REJECT --reject-with icmp-port-unreachable
+
+    ip6tables -A INPUT -p udp -j REJECT --reject-with icmp6-port-unreachable
+    ip6tables -A INPUT -p tcp -j REJECT --reject-with tcp-reset
+    ip6tables -A INPUT -p icmpv6 -j REJECT --reject-with icmp6-port-unreachable
 
            
    
-
-
-
 ### **7.-Ejecute la utilidad de auditoría de seguridad lynis en su sistema y trate de identificar las acciones de securización detectadas así como los consejos sobre las que se deberían contemplar.**
 
   1)Instalamos lynis -> `apt install lynis`
