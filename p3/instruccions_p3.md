@@ -171,7 +171,7 @@ w3m https://wizzz/private
 ```
 Proteger por contraseña:
 ```
-htpasswd -c .htpasswd lsi
+htpasswd -c .htpasswd lsi (en /etc/apache2/)
 nano /etc/apache2/sites-available/default-ssl.conf
 systemctl restart apache2
 lynx https://wizzz/private
