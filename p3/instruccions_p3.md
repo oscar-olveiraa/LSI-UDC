@@ -113,6 +113,74 @@ fusermount -u /mnt/oscar_montura/
   C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
      máquina le solicitará la correspondiente frase de paso, pudiendo dejarla inalcanzable para su sesión ssh de trabajo.
 
+Paso 1: Crear entidad certificadora:
+```
+make-cadir entidad_certificadora
+```
+Paso 2: 
+```
+cd entidad_certificadora
+./easyrsa init-pki
+./easyrsa build-ca nopass
+```
+Paso 3: Crear servidor
+```
+cd /etc/apache2/
+make-cadir easyrsa
+cd easyrsa/
+./easyrsa init-pki
+./easyrsa gen-req 10.11.48.118
+```
+Paso 4:
+```
+cp /etc/apache2/easyrsa/pki/reqs/10.11.48.118.req /home/lsi/Escritorio/entidad_certificadora/
+pushd /home/lsi/Escritorio/entidad_certificadora/
+./easyrsa import-req 10.11.48.118.req 10.11.48.118
+./easyrsa sign-req server 10.11.48.118
+```
+Paso 5:
+```
+cp /home/lsi/Escritorio/entidad_certificadora/pki/issued/10.11.48.118.crt /etc/apache2/easyrsa/
+cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /etc/apache2/easyrsa/
+
+cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /usr/local/share/ca-certificates/
+update-ca-certificates
+```
+Paso 6:
+```
+nano /etc/apache2/sites-available/default-ssl.conf
+```
+Paso 7:
+```
+a2enmod ssl
+systemctl restart apache2
+nano /etc/hosts
+```
+
+PARA PROBAR:
+```
+w3m https://wizzz
+```
+Crear directorio privado
+```
+mkdir /var/www/html/private
+nano /etc/apache2/sites-available/000-default.conf
+systemctl restart apache2
+w3m http://wizzz/private
+w3m https://wizzz/private
+```
+Proteger por contraseña:
+```
+htpasswd -c .htpasswd lsi
+nano /etc/apache2/sites-available/default-ssl.conf
+systemctl restart apache2
+lynx https://wizzz/private
+```
+
+
+
+
+
 
 
 ### **3.-Tomando como base de trabajo el openVPN deberá configurar una VPN entre dos equipos virtuales del laboratorio que garanticen la confidencialidad entre sus comunicaciones.**
