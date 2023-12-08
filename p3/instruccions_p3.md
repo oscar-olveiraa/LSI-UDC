@@ -230,7 +230,7 @@ B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. B
          lynx https://wizzz/private (metemos o seu usuario e a sua contraseña)
          ```    
   
-C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
+  C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
    máquina le solicitará la correspondiente frase de paso, pudiendo dejarla inalcanzable para su sesión ssh de trabajo.
 
  - Crear directorio privado:
