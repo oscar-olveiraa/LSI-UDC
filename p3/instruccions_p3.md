@@ -108,74 +108,139 @@ fusermount -u /mnt/oscar_montura/
    
   A. Configure una Autoridad Certificadora en su equipo.
 
-  B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. Bueno, y fírmelo.
+- Paso 1 -> Crear entidad certificadora:
+
+  ```
+  make-cadir entidad_certificadora
+  ```
+- Paso 2 -> crear claves para CA: 
+
+  ```
+  cd entidad_certificadora
+  ```
+  Cando pidan en algún de estos pasos un common name, poñemos un a nosa ip (p.e 10.11.48.118):
+  ```
+  ./easyrsa init-pki
+  ./easyrsa build-ca nopass
+  ```
+
+B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. Bueno, y fírmelo.
+
+  Seguimos cos pasos anteriores:
+
+  - Paso 3 -> Crear servidor.
   
-  C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
-     máquina le solicitará la correspondiente frase de paso, pudiendo dejarla inalcanzable para su sesión ssh de trabajo.
+    ```
+    cd /etc/apache2/
+    make-cadir easyrsa
+    cd easyrsa/
+    ```
+    Creamos as claves para server. Cando pudan en algún comando de estos un common name, poñemos calquer nombre (p.e wizzz):
+    ```
+    ./easyrsa init-pki
+    ./easyrsa gen-req 10.11.48.118
+    ```
 
-Paso 1: Crear entidad certificadora:
-```
-make-cadir entidad_certificadora
-```
-Paso 2: 
-```
-cd entidad_certificadora
-./easyrsa init-pki
-./easyrsa build-ca nopass
-```
-Paso 3: Crear servidor
-```
-cd /etc/apache2/
-make-cadir easyrsa
-cd easyrsa/
-./easyrsa init-pki
-./easyrsa gen-req 10.11.48.118
-```
-Paso 4:
-```
-cp /etc/apache2/easyrsa/pki/reqs/10.11.48.118.req /home/lsi/Escritorio/entidad_certificadora/
-pushd /home/lsi/Escritorio/entidad_certificadora/
-./easyrsa import-req 10.11.48.118.req 10.11.48.118
-./easyrsa sign-req server 10.11.48.118
-```
-Paso 5:
-```
-cp /home/lsi/Escritorio/entidad_certificadora/pki/issued/10.11.48.118.crt /etc/apache2/easyrsa/
-cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /etc/apache2/easyrsa/
+  - Paso 4 -> Firmar a clave pública do servidor
+  
+    Copiamos as solicitudes de certificados(creo que son claves públicas) que creamos en apache na autoridad certificadora para que sean firmados:
 
-cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /usr/local/share/ca-certificates/
-update-ca-certificates
-```
-Paso 6:
-```
-nano /etc/apache2/sites-available/default-ssl.conf
-```
-Paso 7:
-```
-a2enmod ssl
-systemctl restart apache2
-nano /etc/hosts
-```
+    ```
+    cp /etc/apache2/easyrsa/pki/reqs/10.11.48.118.req /home/lsi/Escritorio/entidad_certificadora/
+    pushd /home/lsi/Escritorio/entidad_certificadora/
+    ```
+    En estos pasos vannos perdir unha contraseña, poñer unha calquera e fácil de aprender:
 
-PARA PROBAR:
-```
-w3m https://wizzz
-```
-Crear directorio privado
-```
-mkdir /var/www/html/private
-nano /etc/apache2/sites-available/000-default.conf
-systemctl restart apache2
-w3m http://wizzz/private
-w3m https://wizzz/private
-```
-Proteger por contraseña:
-```
-htpasswd -c .htpasswd lsi (en /etc/apache2/)
-nano /etc/apache2/sites-available/default-ssl.conf
-systemctl restart apache2
-lynx https://wizzz/private
-```
+    ```
+    ./easyrsa import-req 10.11.48.118.req 10.11.48.118
+    ./easyrsa sign-req server 10.11.48.118
+    ```
+
+  - Paso 5 -> meter a clave firmada e a autoridad certificadora no server:
+
+    Copiamos o certificado firmado(clave pública firmada) na ruta do apache e tamén o a da autoridad certificadora:
+
+    ```
+    cp /home/lsi/Escritorio/entidad_certificadora/pki/issued/10.11.48.118.crt /etc/apache2/easyrsa/
+    cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /etc/apache2/easyrsa/
+    ```
+    Copiamos tamén a clave pública da autoridad certificadora na ruta para que se añada:
+    ```
+    cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /usr/local/share/ca-certificates/
+    update-ca-certificates
+    ```
+  - Paso 6 -> editar archivo de configuración apache:
+
+    ```
+    nano /etc/apache2/sites-available/default-ssl.conf
+    ```
+    Añadimos as seguintes lineas:
+
+    ```
+    SSLCertificateFile      /etc/apache2/easyrsa/10.11.48.118.crt
+    SSLCertificateKeyFile   /etc/apache2/easyrsa/pki/private/10.11.48.118.key
+    SSLCACertificateFile    /etc/apache2/easyrsa/ca.crt
+    ```
+    Activamos o default-ssl.conf (desde /etc/apache2) -> `a2ensite default-ssl` (con esto deberiamos ter o default-ssl.conf en */etc/apache2/sites-enabled/*
+ 
+  - Paso 7 -> activamos ssl e metemos no hosts o noso nombre do server(archivo de texto para asociar direccións IP con nombres de host):
+
+    ```
+    a2enmod ssl
+    systemctl restart apache2
+    nano /etc/hosts (añadimos unha linea que sea p.e 10.11.48.118  wizzz)
+    ```
+
+  - PARA PROBAR:
+
+    ```
+    lynx https://wizzz
+    ```
+  
+C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
+   máquina le solicitará la correspondiente frase de paso, pudiendo dejarla inalcanzable para su sesión ssh de trabajo.
+
+ - Crear directorio privado:
+   
+    ```
+    mkdir /var/www/html/private
+    nano /etc/apache2/sites-available/000-default.conf
+    ```
+ - Añadimos as seguintes lineas ao *000-default.conf* (añadimolas despois de SecRuleEngine On):
+    ```
+     <LocationMatch "^/private">
+             Require all denied
+     </LocationMatch>
+    ```
+ - Restarteamos apache e miramos:
+    ```
+    systemctl restart apache2
+    lynx http://wizzz/private (deberianos denegar o permiso)
+    lynx https://wizzz/private (si añadimos a /var/www/html/private archivos deberian aparecer)
+    ```
+
+ - Proteger por contraseña: 
+    ```
+    htpasswd -c .htpasswd lsi (en /etc/apache2/)
+    nano /etc/apache2/sites-available/default-ssl.conf
+    ```
+
+ - Añadimos as seguintes lineas en *default-ssl.conf*, despois das lineas que puxemos nos pasos anteriores:
+    ```
+    <Directory "/var/www/html/private">
+          AuthType Basic
+          AuthName "Area restringida"
+          AuthBasicProvider file
+          AuthUserFile /etc/apache2/.htpasswd
+          Require valid-user
+    </Directory>
+    ```
+    
+ - Restarteamos apache e comprobamos que pida usuario (lsi) e contraseña (a que escribimos no comando `htpasswd -c .htpasswd lsi`) 
+    ```
+    systemctl restart apache2
+    lynx https://wizzz/private
+    ```
 
 
 
