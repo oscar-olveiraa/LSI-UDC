@@ -109,6 +109,8 @@ fusermount -u /mnt/oscar_montura/
 ### **2.-Tomando como base de trabajo el servidor Apache2**
 
 > A o certificado pon que expirou, revisar que a fecha sexa despois da creación do certificado ou antes de que caduque (creo que son 3 anos de caducidad)
+>
+> Nos desactivamos modSecurity -> `a2dismod security2` e comentar linea 'SecRuleEngine On' do *000-default.conf* 
    
   A. Configure una Autoridad Certificadora en su equipo.
 
@@ -139,7 +141,7 @@ B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. B
     make-cadir easyrsa
     cd easyrsa/
     ```
-    Creamos as claves para server. Cando pudan en algún comando de estos un common name, poñemos calquer nombre (p.e wizzz):
+    Creamos as claves para server. Cando pidan en algún comando de estos un common name, poñemos calquer nombre (p.e wizzz):
     ```
     ./easyrsa init-pki
     ./easyrsa gen-req 10.11.48.118
@@ -168,7 +170,7 @@ B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. B
     cp /home/lsi/Escritorio/entidad_certificadora/pki/issued/10.11.48.118.crt /etc/apache2/easyrsa/
     cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /etc/apache2/easyrsa/
     ```
-    Copiamos tamén a clave pública da autoridad certificadora na ruta para que se añada:
+    Copiamos tamén a clave pública da autoridad certificadora na ruta */usr/local/share/ca-certificates/* para que se añada:
     ```
     cp /home/lsi/Escritorio/entidad_certificadora/pki/ca.crt /usr/local/share/ca-certificates/
     update-ca-certificates
@@ -185,7 +187,7 @@ B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. B
     SSLCertificateKeyFile   /etc/apache2/easyrsa/pki/private/10.11.48.118.key
     SSLCACertificateFile    /etc/apache2/easyrsa/ca.crt
     ```
-    Activamos o default-ssl.conf (desde /etc/apache2) -> `a2ensite default-ssl` (con esto deberiamos ter o default-ssl.conf en */etc/apache2/sites-enabled/*
+    Activamos o default-ssl.conf (desde /etc/apache2/sites-available) -> `a2ensite default-ssl` (con esto deberiamos ter o default-ssl.conf en */etc/apache2/sites-enabled/*
  
   - Paso 7 -> activamos ssl e metemos no hosts o noso nombre do server(archivo de texto para asociar direccións IP con nombres de host):
 
