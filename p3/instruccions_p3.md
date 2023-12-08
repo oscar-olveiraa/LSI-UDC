@@ -107,6 +107,8 @@ fusermount -u /mnt/oscar_montura/
 
 
 ### **2.-Tomando como base de trabajo el servidor Apache2**
+
+> A o certificado pon que expirou, revisar que a fecha sexa despois da creación do certificado ou antes de que caduque (creo que son 3 anos de caducidad)
    
   A. Configure una Autoridad Certificadora en su equipo.
 
