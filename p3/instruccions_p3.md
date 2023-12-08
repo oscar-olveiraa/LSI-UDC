@@ -75,15 +75,17 @@ C) Configure su cliente y servidor para permitir conexiones basadas en un esquem
   
 D) Mediante túneles SSH securice algún servicio no seguro.
 
-  Para crear o tunel ssh -> `ssh -L 9090:localhost:80 lsi@10.11.48.118 -N`
+  Para crear o tunel ssh -> `ssh -L 9090:localhost:8080 lsi@10.11.48.118 -N`
 
-  Comprobación (o 'cliente' ten que estar escoitando mentres o servidor lle manda mensaxes):
+  1º Comprobación (o 'cliente' ten que estar escoitando mentres o servidor lle manda mensaxes):
 
   Quen estableza o tunel -> `echo "Hola desde mi máquina local" | nc -q 0 localhost 9090` (mirar o do -q)
 
   Quen estea como 'cliente', recibirá ese mensaxe cando estea escoitando -> `nc -l -p 8080`
 
   2º comprobación:
+
+  Crear o tunel ssh -> `ssh -L 9090:localhost:80 lsi@10.11.48.118 -N`
 
   Si o servidor fai `lynx http://127.0.0.1:9090` debería estar no apache do compañeiro
 
@@ -196,6 +198,33 @@ B. Cree su propio certificado para ser firmado por la Autoridad Certificadora. B
     ```
     lynx https://wizzz
     ```
+
+  - Para poder entrar no server do compañeiro:
+
+     ```
+     cd /etc/apache2/easyrsa
+     cp ca.crt wizzz_ca.crt
+     scp wizzz_ca.crt lsi@10.11.48.135:/home/lsi
+     ```
+
+     + O compañeiro(10.11.48.135) na súa máquina:
+
+         ```
+         mv wizzz_ca.crt /usr/local/share/ca-certificates/
+         update-ca-certificates
+         systemctl restart apache2   
+         ```
+         Añadimos a /etc/hosts ao compañeiro:
+
+         ```
+         10.11.48.118  wizzz
+         ```
+         Comprobación:
+
+         ```
+         lynx https://wizzz
+         lynx https://wizzz/private (metemos o seu usuario e a sua contraseña)
+         ```    
   
 C. Configure su Apache para que únicamente proporcione acceso a un determinado directorio del árbol web bajo la condición del uso de SSL. Considere que si su la clave privada está cifrada en el proceso de arranque su 
    máquina le solicitará la correspondiente frase de paso, pudiendo dejarla inalcanzable para su sesión ssh de trabajo.
