@@ -4,7 +4,7 @@
 >
 >-Si temos que pasarlle archivos á unha máquina de lsi -> scp archivo_origen lsi@ip:directorio_destino
 >
-> Por exemplo -> `scp melonazo.pcap lsi@10.11.48.11:/hom/lsi` (mandas o archivo 'melonazo.pcap' á ruta ruta /home/lsi da máquina 10.11.48.11)
+> Por exemplo -> `scp melonazo.pcap lsi@10.11.48.11:/home/lsi` (mandas o archivo 'melonazo.pcap' á ruta ruta /home/lsi da máquina 10.11.48.11)
 
 ### **1.-Instale el ettercap y pruebe sus opciones básicas en línea de comando.**
 
@@ -568,7 +568,7 @@ equipo(routers, servidores DNS, amplificadores...) que ataque á víctima. Enví
 Direct attack: Envío masivo de paquetes de maneira directa á víctima.
 
 Reflective looding attack: utilizase nodos intermedios. O atacante envía paquetes que requiren resposta aos amplificadores con ip orixen a da víctima (os amplificadores
-responderán unha barbarid de veces á máquina víctima). Por exemplo un ataque Fraggle
+responderán unha barbarid de veces á máquina víctima). Por exemplo un ataque Fraggle ou un ataque botnet
 
 
 
