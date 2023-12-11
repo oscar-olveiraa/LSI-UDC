@@ -2,7 +2,7 @@
 
 > Este ano mandaronnos facer os exercicios 1,2,3,6,7.
 >
-> Acordarse que as conexións ssh (tanto as que fagamos con openvpn, ipv6, ao compañeiro) facemolas como usuario lsi.
+> Acordarse que as conexións ssh (tanto as que fagamos con openvpn, ipv6, á ipv4) facemolas como usuario lsi.
 
 ### **1.-Tomando como base de trabajo el SSH pruebe sus diversas utilidades:**
 
@@ -94,6 +94,8 @@ D) Mediante túneles SSH securice algún servicio no seguro.
   Pregunta defensa -> facer tunel ao rsyslog(o tunel faino o cliente e edita solo o cliente):
 
   1)Crear o tunel ssh para securizar servicio rsyslog (vale calquer puerto por encima do well_known -> rango do puerto 0 ao 1023) -> `ssh -L 9090:localhost:514 lsi@10.11.48.118 -N`
+
+   Si o tunel o fai o servidor ten que facer o comando -> `ssh -R 9090:localhost:514 lsi@10.11.48.135 -N`
 
   2)O cliente edita as lineas do target (pon a ip do localhost) e tamén cambiar o puerto (poñer o 9090). 
 
