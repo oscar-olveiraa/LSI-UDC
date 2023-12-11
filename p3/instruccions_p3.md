@@ -1,6 +1,8 @@
 # **Práctica 3 Legislación e Seguridad Informática**
 
 > Este ano mandaronnos facer os exercicios 1,2,3,6,7.
+>
+> Acordarse que as conexións ssh (tanto as que fagamos con openvpn, ipv6, ao compañeiro) facemolas como usuario lsi.
 
 ### **1.-Tomando como base de trabajo el SSH pruebe sus diversas utilidades:**
 
@@ -89,6 +91,12 @@ D) Mediante túneles SSH securice algún servicio no seguro.
 
   Si o servidor fai `lynx http://127.0.0.1:9090` debería estar no apache do compañeiro
 
+  Pregunta defensa -> facer tunel ao rsyslog(o tunel faino o cliente e edita solo o cliente):
+
+  1)Crear o tunel ssh para securizar servicio rsyslog (vale calquer puerto por encima do well_known -> rango do puerto 0 ao 1023) -> `ssh -L 9090:localhost:514 lsi@10.11.48.118 -N`
+
+  2)O cliente edita as lineas do target (pon a ip do localhost) e tamén cambiar o puerto (poñer o 9090). 
+
 #
   
 E) “Exporte” un directorio y “móntelo” de forma remota sobre un túnel SSH.
@@ -110,7 +118,9 @@ fusermount -u /mnt/oscar_montura/
 
 > A o certificado pon que expirou, revisar que a fecha sexa despois da creación do certificado ou antes de que caduque (creo que son 3 anos de caducidad)
 >
-> Nos desactivamos modSecurity -> `a2dismod security2` e comentar linea 'SecRuleEngine On' do *000-default.conf* 
+> Nos desactivamos modSecurity -> `a2dismod security2` e comentar linea 'SecRuleEngine On' do *000-default.conf*
+>
+> Defensa -> mirar que ao facer o comando `` aparezan dous certificados (o da ca e a do servidor).
    
   A. Configure una Autoridad Certificadora en su equipo.
 
